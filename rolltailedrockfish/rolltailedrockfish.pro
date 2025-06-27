@@ -12,12 +12,18 @@ SOURCES += \
     findbookdialog.cpp \
     main.cpp \
     mainwindow.cpp \
-    registerdialog.cpp
+    registerdialog.cpp \
+    Book.cpp \
+    User.cpp \
+    UserManager.cpp
 
 HEADERS += \
     findbookdialog.h \
     mainwindow.h \
-    registerdialog.h
+    registerdialog.h \
+    Book.h \
+    User.h \
+    UserManager.h
 
 FORMS += \
     mainwindow.ui
