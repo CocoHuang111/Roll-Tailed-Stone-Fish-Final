@@ -13,6 +13,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     registerdialog.cpp \
+    Announcement.cpp \
     Book.cpp \
     User.cpp \
     UserManager.cpp
@@ -21,6 +22,7 @@ HEADERS += \
     findbookdialog.h \
     mainwindow.h \
     registerdialog.h \
+    Announcement.h \
     Book.h \
     User.h \
     UserManager.h
