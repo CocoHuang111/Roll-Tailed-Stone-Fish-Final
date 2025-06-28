@@ -9,6 +9,7 @@
 #include <QLineEdit>
 #include <QFormLayout>
 #include <QScrollArea>
+#include <QMessageBox>
 #include "registerdialog.h"
 #include "findbookdialog.h"
 
@@ -278,6 +279,53 @@ void MainWindow::setpage2(QWidget* pg){
     pg->setLayout(layout2);
 }
 
+// TODO 返回isbn定位到书本身
+QList<Book> MainWindow::parseSearchResults(const QByteArray &jsonData) {
+    QList<Book> books;
+    QJsonDocument doc = QJsonDocument::fromJson(jsonData);
+
+    if (doc.isArray()) {
+        for (const QJsonValue &val : doc.array()) {
+            QJsonObject obj = val.toObject();
+            Book book;
+            book.title = obj["title"].toString();
+            book.author = obj["author"].toString();
+            book.price = obj["price"].toString().toDouble();
+            // ...其他字段赋值
+            books.append(book);
+        }
+    }
+    return books;
+}
+
+// TODO 对display进行修改
+void MainWindow::displaySearchResults(const QList<Book> &books, QWidget *container) {
+    // 清空容器
+    QLayout *layout = container->layout();
+    if (layout) {
+        QLayoutItem *item;
+        while ((item = layout->takeAt(0))) {
+            delete item->widget();
+            delete item;
+        }
+    } else {
+        layout = new QVBoxLayout(container);
+    }
+
+    // 动态创建结果项
+    for (const Book &book : books) {
+        QLabel *item = new QLabel(
+            QString("<b>%1</b><br>作者: %2<br>价格: %3")
+                .arg(book.title.toHtmlEscaped())
+                .arg(book.author.toHtmlEscaped())
+                .arg(book.price)
+            );
+        item->setStyleSheet("color: white; padding: 10px;");
+        layout->addWidget(item);
+    }
+    container->setLayout(layout);
+}
+
 void MainWindow::setpage3(QWidget* pg){
     QLineEdit *search_column=new QLineEdit("搜索：");
     search_column->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -320,6 +368,29 @@ void MainWindow::setpage3(QWidget* pg){
     //搜索
     connect(search_confirm,&QPushButton::clicked,[=](){
         //搜索算法 TODO
+        QString keyword = search_column->text().trimmed();
+
+        // 构建请求URL
+        QUrl url("http://localhost:8080/api/books/search");
+        QUrlQuery query;
+        query.addQueryItem("query", keyword);
+        url.setQuery(query);
+
+        // 发送GET请求
+        QNetworkRequest request(url);
+        QNetworkReply *reply = networkManager->get(request);
+
+        connect(reply, &QNetworkReply::finished, [=](){
+            if (reply->error() == QNetworkReply::NoError) {
+                QByteArray response = reply->readAll();
+                QList<Book> books = parseSearchResults(response);
+                displaySearchResults(books, search_result);
+            } else {
+                qWarning() << "Search failed:" << reply->errorString();
+            }
+            reply->deleteLater();
+        });
+
         search_pages->setCurrentIndex(1);
     });
 
