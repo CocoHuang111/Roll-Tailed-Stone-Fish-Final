@@ -192,19 +192,20 @@ void MainWindow::setpage1(QWidget* pg){
         }
     });
     
-    connect(login,&QPushButton::clicked,[=](){
-        // name password
+        connect(login,&QPushButton::clicked,[=](){
+        QString curname = nameInput->text();
+        QString curpassword = pwdInput->text();
         // 1. 输入验证
-        if (name.isEmpty() || password.isEmpty()) {
+        if (curname.isEmpty() || curpassword.isEmpty()) {
             QMessageBox::warning(this, "输入错误", "用户名和密码不能为空");
             return;
         }
 
         // 2. 调用UserManager验证登录
-        User* user = qy.getUser(name);
+        User* user = qy.getUser(curname);
 
         // 3. 验证用户是否存在及密码是否正确
-        if (!user || !user->verifyPassword(password.toStdString())) {
+        if (!user || !user->verifyPassword(curpassword.toStdString())) {
             QMessageBox::critical(this, "登录失败", "用户名或密码错误");
 
             // 安全建议：清空密码框
@@ -216,7 +217,7 @@ void MainWindow::setpage1(QWidget* pg){
         // 4. 登录成功处理
         QMessageBox::information(this, "成功", "登录成功！");
         currentUser = user;
-        MainArea->setCurrentIndex(1);
+        //跳转界面
     });
 
     QVBoxLayout *fill_in=new QVBoxLayout;
