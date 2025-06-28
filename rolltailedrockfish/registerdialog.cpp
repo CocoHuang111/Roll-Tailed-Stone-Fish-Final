@@ -7,8 +7,33 @@
 
 RegisterDialog::RegisterDialog(QWidget *parent) : QDialog(parent) {
     setWindowTitle("注册");
+    
+    // 初始化成员变量
+    usernameEdit = new QLineEdit(this);
+    usernameEdit->setPlaceholderText("请输入用户名");
 
+    passwordEdit = new QLineEdit(this);
+    passwordEdit->setPlaceholderText("请输入密码");
+    passwordEdit->setEchoMode(QLineEdit::Password);
+
+    contactEdit = new QLineEdit(this);
+    contactEdit->setPlaceholderText("请输入联系方式");
+
+    QPushButton *confirmBtn = new QPushButton("确认", this);
+
+    // 布局
+    QFormLayout *formLayout = new QFormLayout;
+    formLayout->addRow("用户名:", usernameEdit);
+    formLayout->addRow("密码:", passwordEdit);
+    formLayout->addRow("联系方式:", contactEdit);
+
+    QVBoxLayout *mainLayout = new QVBoxLayout(this);
+    mainLayout->addLayout(formLayout);
+    mainLayout->addWidget(confirmBtn);
+
+    connect(confirmBtn, &QPushButton::clicked, this, &QDialog::accept);
     // 创建控件
+    /*
     QLabel *title = new QLabel("欢迎注册翻尾石鱼！为了保证交易的顺利进行，请完成以下必要信息的填写！");
     QLineEdit *usernameEdit = new QLineEdit;
     //usernameEdit->setPlaceholderText("请输入用户名");
@@ -43,4 +68,5 @@ RegisterDialog::RegisterDialog(QWidget *parent) : QDialog(parent) {
     username=usernameEdit->text();
     password=passwordEdit->text();
     contact=ContactEdit->text();
+    */
 }
