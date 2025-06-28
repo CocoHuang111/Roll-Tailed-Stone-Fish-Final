@@ -426,7 +426,7 @@ void MainWindow::setpage4(QWidget* pg){
     connect(add_announcement,&QPushButton::clicked,[=](){
         AnnouncementDialog *new_announcement=new AnnouncementDialog(this);
         new_announcement->show();
-        //TODO: if(new_announcement->exec()== QDialog::Accepted){}
+        //TODO: if(new_announcement->exec()== QDialog::Accepted){}其中读取到用户输入的内容存在announcement_content中(QString)
     });
 
     QHBoxLayout *head_layout=new QHBoxLayout;
