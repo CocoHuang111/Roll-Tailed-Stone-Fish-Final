@@ -8,13 +8,10 @@
 #include <QJsonObject>
 #include <QCryptographicHash>
 
-using namespace std;
-
 class Book; // 前向声明
 
 class User {
 public:
-
     //交易记录（选择性添加）
     struct TransactionRecord {
         QDateTime time;
@@ -23,18 +20,17 @@ public:
         QString detail;     // 如购买的书籍ISBN
     };
 
-    string username;
-    string password;
-    unordered_set<string> preferences;
-    vector<Book*> booksOnSale;
-    string contact;
+    std::string username;
+    std::string password;
+    std::unordered_set<std::string> preferences;
+    std::vector<Book*> booksOnSale;
+    std::string contact;
     double tokens;
-    vector<string> achievements;
+    std::vector<std::string> achievements;
+    std::vector<TransactionRecord> transactionHistory;
 
-    User(const string& name, const string& pwd,
-         const string& contactInfo, double initialTokens = 0.0);
-    vector<TransactionRecord> transactionHistory; // 交易记录容器
-
+    User(const std::string& name, const std::string& pwd,
+         const std::string& contactInfo, double initialTokens = 0.0);
 
     // 各种成员函数声明...
     QJsonObject toJson() const;
@@ -42,12 +38,12 @@ public:
     bool verifyPassword(const std::string& inputPassword) const;
     bool removeBookFromSale(Book* book);
     void addBookForSale(Book* book);
-    const vector<Book*>& getBooksOnSale() const;
+    const std::vector<Book*>& getBooksOnSale() const;
     void rechargeTokens(double amount);
     double getTokens() const;
     bool purchaseBook(Book* book);
     void addTransactionRecord(const TransactionRecord& record);
-    const vector<TransactionRecord>& getTransactionHistory() const;
+    const std::vector<TransactionRecord>& getTransactionHistory() const;
 };
 
 #endif // USER_H
