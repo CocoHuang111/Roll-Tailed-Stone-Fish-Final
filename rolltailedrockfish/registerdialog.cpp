@@ -43,5 +43,4 @@ RegisterDialog::RegisterDialog(QWidget *parent) : QDialog(parent) {
     username=usernameEdit->text();
     password=passwordEdit->text();
     contact=ContactEdit->text();
-    address=addressEdit->text();
 }
