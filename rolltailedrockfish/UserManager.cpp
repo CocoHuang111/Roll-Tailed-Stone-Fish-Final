@@ -21,7 +21,8 @@ bool UserManager::createUser(const QString &username, const QString &password, c
     User *newUser = new User(
         username.toStdString(),
         password.toStdString(),  // 注意：实际项目应存储密码的哈希值，而非明文！
-        contact.toStdString()
+        contact.toStdString(),
+        address.toStdString()
         );
 
     // 3. 添加到用户列表
