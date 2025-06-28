@@ -80,6 +80,8 @@ private:
     //page4 announce相关
     void saveAnnouncementsToFile(const QList<Announcement> &ann);
     QList<Announcement> readAllAnnouncements();
+    QWidget* createAnnouncementWidget(const Announcement& announcement);
+    void refreshAnnouncements(QVBoxLayout* scrollLayout);
 };
 
 #endif // MAINWINDOW_H
