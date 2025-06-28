@@ -4,6 +4,9 @@
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QDebug>
+#include <QFileInfo>
+#include <QSaveFile>
+#include <QDir>
 
 UserManager::~UserManager() {
     saveUsersToFile();
@@ -16,11 +19,11 @@ bool UserManager::createUser(const QString &username, const QString &password, c
         qDebug() << "用户名已存在:" << username;
         return false;
     }
-    
+
     // 2. 创建新用户（实际项目中密码应先哈希加密！）
     User *newUser = new User(
         username.toStdString(),
-        password.toStdString(),  // 注意：实际项目应存储密码的哈希值，而非明文！
+        password.toStdString(), // 注意：实际项目应存储密码的哈希值，而非明文！
         contact.toStdString()
         );
 
@@ -40,24 +43,45 @@ User* UserManager::getUser(const QString& username) {
 
 bool UserManager::saveUsersToFile() {
     QJsonArray jsonArray;
-    for (const auto& pair : users) {
-        jsonArray.append(pair.second->toJson());
+
+    // 确保目录存在
+    QFileInfo fileInfo(dataFilePath);
+    if (!QDir().mkpath(fileInfo.path())) {
+        qWarning() << "无法创建目录:" << fileInfo.path();
+        return false;
     }
-    QFile file(dataFilePath);
-    if (!file.open(QIODevice::WriteOnly)) return false;
+
+    // 构建JSON数据
+    for (const auto& [username, user] : users) {
+        jsonArray.append(user->toJson());
+    }
+
+    // 原子写入（避免数据损坏）
+    QSaveFile file(dataFilePath);
+    if (!file.open(QIODevice::WriteOnly)) {
+        qWarning() << "文件打开失败:" << file.errorString();
+        return false;
+    }
     file.write(QJsonDocument(jsonArray).toJson());
-    return true;
+    return file.commit(); // 只有成功才会替换原文件
 }
 
 bool UserManager::loadUsersFromFile() {
     QFile file(dataFilePath);
-    if (!file.open(QIODevice::ReadOnly)) return false;
-    QByteArray data = file.readAll();
-    QJsonArray jsonArray = QJsonDocument::fromJson(data).array();
+    if (!file.exists()) return true; // 文件不存在不算错误
 
-    for (const auto& jsonValue : jsonArray) {
-        User* user = User::fromJson(jsonValue.toObject());
-        users[QString::fromStdString(user->username)] = user;
+    if (!file.open(QIODevice::ReadOnly)) {
+        qWarning() << "文件读取失败:" << file.errorString();
+        return false;
+    }
+
+    // 解析JSON
+    QJsonArray jsonArray = QJsonDocument::fromJson(file.readAll()).array();
+    for (const auto& userJson : jsonArray) {
+        User* user = User::fromJson(userJson.toObject());
+        if (user) {
+            users[QString::fromStdString(user->username)] = user;
+        }
     }
     return true;
 }
