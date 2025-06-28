@@ -13,7 +13,6 @@ class UserManager {
 public:
     unordered_map<QString, User*> users;
     QString dataFilePath = "users.json";
-
     ~UserManager();
     bool createUser(const QString& username, const QString& password, const QString& contact);
     User* getUser(const QString& username);
