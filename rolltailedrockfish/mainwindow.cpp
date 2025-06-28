@@ -15,6 +15,7 @@
 #include "Book.h"
 #include "User.h"
 #include "UserManager.h"
+#include "announcementdialog.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QWidget(parent)
@@ -421,6 +422,18 @@ void MainWindow::setpage4(QWidget* pg){
         "color:white;"
         "font-size: 30px;"
         );
+    ResizeButton *add_announcement=new ResizeButton("发布新公告");
+    connect(add_announcement,&QPushButton::clicked,[=](){
+        AnnouncementDialog *new_announcement=new AnnouncementDialog(this);
+        new_announcement->show();
+        //TODO: if(new_announcement->exec()== QDialog::Accepted){}
+    });
+
+    QHBoxLayout *head_layout=new QHBoxLayout;
+    head_layout->setContentsMargins(0,0,200,0);
+    head_layout->setSpacing(30);
+    head_layout->addWidget(community_title);
+    head_layout->addWidget(add_announcement);
 
     QVBoxLayout *scroll_layout=new QVBoxLayout;
     //读入所有公告 TODO
@@ -434,7 +447,7 @@ void MainWindow::setpage4(QWidget* pg){
 
     QVBoxLayout *layout4=new QVBoxLayout;
     layout4->setContentsMargins(30,35,30,35);
-    layout4->addWidget(community_title);
+    layout4->addLayout(head_layout);
     layout4->addStretch();
     layout4->addWidget(scroll);
 
