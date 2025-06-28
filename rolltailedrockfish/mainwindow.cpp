@@ -217,7 +217,7 @@ void MainWindow::setpage1(QWidget* pg){
         // 4. 登录成功处理
         QMessageBox::information(this, "成功", "登录成功！");
         currentUser = user;
-        //跳转界面 todo
+        updateUserInfo();  // 立即刷新
         MainArea->setCurrentIndex(1);
     });
 
