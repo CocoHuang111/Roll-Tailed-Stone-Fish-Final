@@ -2,12 +2,16 @@
 #define ANNOUNCEMENTDIALOG_H
 
 #include <QDialog>
+#include <QLineEdit>
 
 class AnnouncementDialog : public QDialog
 {
 public:
     AnnouncementDialog(QWidget *parent = nullptr);
-    QString announcement_content;
+    QString content() const;
+
+private:
+    QLineEdit *m_announcementEdit;
 };
 
 #endif // ANNOUNCEMENTDIALOG_H
