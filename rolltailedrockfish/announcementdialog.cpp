@@ -10,8 +10,7 @@ AnnouncementDialog::AnnouncementDialog(QWidget *parent) : QDialog(parent)  {
 
     // 创建控件
     QLabel *title = new QLabel("请填写公告内容～");
-    QLineEdit *AnnouncementEdit = new QLineEdit;
-    announcement_content=AnnouncementEdit->text();
+    m_announcementEdit = new QLineEdit;
     QPushButton *loginBtn = new QPushButton("确认");
 
     // 连接槽函数
@@ -20,9 +19,13 @@ AnnouncementDialog::AnnouncementDialog(QWidget *parent) : QDialog(parent)  {
     // 使用布局
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout->addWidget(title);
-    mainLayout->addWidget(AnnouncementEdit);
+    mainLayout->addWidget(m_announcementEdit);
     mainLayout->addWidget(loginBtn);
 
     setLayout(mainLayout);
     setFixedSize(400, 200);  // 可选：设置窗口大小
+}
+
+QString AnnouncementDialog::content() const {
+    return m_announcementEdit->text(); // 实时返回当前内容
 }
