@@ -11,7 +11,7 @@ AnnouncementDialog::AnnouncementDialog(QWidget *parent) : QDialog(parent)  {
     // 创建控件
     QLabel *title = new QLabel("请填写公告内容～");
     QLineEdit *AnnouncementEdit = new QLineEdit;
-    announcement_content=AnnouncementEdit.text();
+    announcement_content->AnnouncementEdit.text();
     QPushButton *loginBtn = new QPushButton("确认");
 
     // 连接槽函数
