@@ -218,6 +218,7 @@ void MainWindow::setpage1(QWidget* pg){
         QMessageBox::information(this, "成功", "登录成功！");
         currentUser = user;
         //跳转界面 todo
+        MainArea->setCurrentIndex(1);
     });
 
     QVBoxLayout *fill_in=new QVBoxLayout;
