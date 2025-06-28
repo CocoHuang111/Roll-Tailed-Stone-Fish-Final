@@ -477,6 +477,7 @@ void MainWindow::setpage3(QWidget* pg){
     pg->setLayout(layout3);
 }
 
+
 void MainWindow::saveAnnouncementsToFile(const QList<Announcement> &announcements) {
     QJsonArray array;
     for(const Announcement &ann : announcements) {
@@ -494,6 +495,7 @@ void MainWindow::saveAnnouncementsToFile(const QList<Announcement> &announcement
         qDebug() << "无法打开文件进行写入:" << file.errorString();
     }
 }
+
 QList<Announcement> MainWindow::readAllAnnouncements() {
     QList<Announcement> announcements;
 
@@ -526,6 +528,59 @@ QList<Announcement> MainWindow::readAllAnnouncements() {
     return announcements;
 }
 
+QWidget* MainWindow::createAnnouncementWidget(const Announcement& announcement) {
+    QWidget* widget = new QWidget();
+    widget->setStyleSheet("background-color: white; border-radius: 10px; padding: 15px; margin-bottom: 10px;");
+
+    QVBoxLayout* layout = new QVBoxLayout(widget);
+
+    // 用户信息行
+    QHBoxLayout* userLayout = new QHBoxLayout();
+
+    QLabel* userLabel = new QLabel(announcement.user());
+    userLabel->setStyleSheet("font-weight: bold; color: #333;");
+
+    QLabel* timeLabel = new QLabel(announcement.time().toString("yyyy-MM-dd hh:mm"));
+    timeLabel->setStyleSheet("color: #999; font-size: 12px;");
+
+    userLayout->addWidget(userLabel);
+    userLayout->addStretch();
+    userLayout->addWidget(timeLabel);
+
+    // 公告内容
+    QLabel* contentLabel = new QLabel(announcement.content());
+    contentLabel->setWordWrap(true);
+    contentLabel->setStyleSheet("color: #555; margin-top: 8px;");
+
+    layout->addLayout(userLayout);
+    layout->addWidget(contentLabel);
+
+    return widget;
+}
+
+void MainWindow::refreshAnnouncements(QVBoxLayout* scrollLayout) {
+    // 清除现有公告（保留其他可能的控件）
+    QLayoutItem* item;
+    while ((item = scrollLayout->takeAt(0)) != nullptr) {
+        if (item->widget()) {
+            delete item->widget();
+        }
+        delete item;
+    }
+
+    // 读取所有公告
+    QList<Announcement> announcements = readAllAnnouncements();
+
+    // 添加公告到布局
+    for (const Announcement& ann : announcements) {
+        QWidget* announcementWidget = createAnnouncementWidget(ann);
+        scrollLayout->addWidget(announcementWidget);
+    }
+
+    // 添加伸缩项使内容顶部对齐
+    scrollLayout->addStretch();
+}
+
 void MainWindow::setpage4(QWidget* pg){
     QLabel *community_title=new QLabel("未名湖捞书社区");
     community_title->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -534,6 +589,25 @@ void MainWindow::setpage4(QWidget* pg){
         "font-size: 30px;"
         );
     ResizeButton *add_announcement=new ResizeButton("发布新公告");
+
+    QHBoxLayout *head_layout=new QHBoxLayout;
+    head_layout->setContentsMargins(0,0,200,0);
+    head_layout->setSpacing(30);
+    head_layout->addWidget(community_title);
+    head_layout->addWidget(add_announcement);
+
+    // 滚动区域
+    QVBoxLayout* scroll_layout = new QVBoxLayout;
+    QWidget* scroll_page = new QWidget;
+    scroll_page->setStyleSheet("background-color: rgba(255,255,255,0);");
+    scroll_page->setLayout(scroll_layout);
+    QScrollArea* scroll = new QScrollArea;
+    scroll->setStyleSheet("background-color: rgba(255,255,255,0);");
+    scroll->setWidget(scroll_page);
+    scroll->setWidgetResizable(true);
+
+    refreshAnnouncements(scroll_layout);
+
     connect(add_announcement,&QPushButton::clicked,[=](){
         AnnouncementDialog *new_announcement=new AnnouncementDialog(this);
         new_announcement->show();
@@ -549,23 +623,8 @@ void MainWindow::setpage4(QWidget* pg){
             saveAnnouncementsToFile(allAnnouncements);
             QMessageBox::information(this, "成功", "公告已保存");
         }
+        refreshAnnouncements(scroll_layout);
     });
-
-    QHBoxLayout *head_layout=new QHBoxLayout;
-    head_layout->setContentsMargins(0,0,200,0);
-    head_layout->setSpacing(30);
-    head_layout->addWidget(community_title);
-    head_layout->addWidget(add_announcement);
-
-    QVBoxLayout *scroll_layout=new QVBoxLayout;
-    //读入所有公告 TODO
-    QWidget *scroll_page=new QWidget;
-    scroll_page->setStyleSheet("background-color: rgba(255,255,255,0);");
-    scroll_page->setLayout(scroll_layout);
-    QScrollArea *scroll=new QScrollArea;
-    scroll->setStyleSheet("background-color: rgba(255,255,255,0);");
-    scroll->setWidget(scroll_page);
-    scroll->setWidgetResizable(true);
 
     QVBoxLayout *layout4=new QVBoxLayout;
     layout4->setContentsMargins(30,35,30,35);
@@ -575,6 +634,7 @@ void MainWindow::setpage4(QWidget* pg){
 
     pg->setLayout(layout4);
 }
+
 
 void MainWindow::setpage5(QWidget* pg){
     QLabel *sellbook_title=new QLabel("我的在售书目");
