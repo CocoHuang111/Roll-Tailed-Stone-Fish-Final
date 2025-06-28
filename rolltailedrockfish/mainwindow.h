@@ -10,6 +10,7 @@
 #include <QNetworkReply>
 #include <QJsonArray>
 #include "Book.h"
+#include "UserManager.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
