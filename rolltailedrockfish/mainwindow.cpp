@@ -60,7 +60,7 @@ MainWindow::MainWindow(QWidget *parent)
     menu->setStyleSheet("background-color: rgba(255, 255, 255, 0);");
 
     //右侧主区域
-    QStackedWidget *MainArea=new QStackedWidget;
+    //QStackedWidget *MainArea=new QStackedWidget;
     QWidget *page1=new QWidget;
     setpage1(page1);
     QWidget *page2=new QWidget;
