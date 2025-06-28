@@ -12,6 +12,7 @@
 #include "Book.h"
 #include "UserManager.h"
 #include <QStackedWidget>
+#include <QLabel>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -35,6 +36,7 @@ protected:
 private:
     Ui::MainWindow *ui;
     QPixmap background;
+    QLabel* usernameLabel;
     QNetworkAccessManager *networkManager;
     int current_page;
     void setpage1(QWidget*);
