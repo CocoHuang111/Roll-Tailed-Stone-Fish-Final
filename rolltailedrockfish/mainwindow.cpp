@@ -475,8 +475,8 @@ void MainWindow::setpage5(QWidget* pg){
     ResizeButton *add_book=new ResizeButton("添加新书");
     //添加新书的后续操作 TODO
     connect(add_book,&QPushButton::clicked,[=](){
-        FindbookDialog addbook=new FindbookDialog(this);
-        addbook.show();
+        FindbookDialog *addbook=new FindbookDialog(this);
+        addbook->show();
     });
 
     QHBoxLayout *headline=new QHBoxLayout;
