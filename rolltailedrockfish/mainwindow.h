@@ -37,6 +37,8 @@ private:
     Ui::MainWindow *ui;
     QPixmap background;
     QLabel* usernameLabel;
+    QLabel* contactLabel;
+    void updateUserInfo();
     QNetworkAccessManager *networkManager;
     int current_page;
     void setpage1(QWidget*);
