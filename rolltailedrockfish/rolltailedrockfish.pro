@@ -16,7 +16,8 @@ SOURCES += \
     Announcement.cpp \
     Book.cpp \
     User.cpp \
-    UserManager.cpp
+    UserManager.cpp \
+    announcementdialog.cpp
 
 HEADERS += \
     findbookdialog.h \
@@ -25,7 +26,8 @@ HEADERS += \
     Announcement.h \
     Book.h \
     User.h \
-    UserManager.h
+    UserManager.h \
+    announcementdialog.h
 
 FORMS += \
     mainwindow.ui
