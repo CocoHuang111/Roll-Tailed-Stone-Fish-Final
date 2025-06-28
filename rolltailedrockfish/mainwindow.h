@@ -24,6 +24,7 @@ class MainWindow : public QWidget
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    UserManager qy;
 
 protected:
     void paintEvent(QPaintEvent *event) override;
