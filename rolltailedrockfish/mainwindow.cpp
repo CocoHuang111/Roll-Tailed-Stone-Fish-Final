@@ -178,7 +178,7 @@ void MainWindow::setpage1(QWidget* pg){
                 flag = false;
                 //ui->stackedWidget->setCurrentIndex(1);  // 跳转到登录页面
             } else {
-                // QMessageBox::critical(this, "错误", "用户名已存在！");
+                QMessageBox::critical(this, "错误", "用户名已存在！");
             }
         };
     });
