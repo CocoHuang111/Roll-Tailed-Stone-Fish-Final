@@ -482,7 +482,6 @@ void MainWindow::setpage6(QWidget* pg){
         "font-size: 30px;"
         );
     QVBoxLayout *user_layout=new QVBoxLayout;
-    user_layout->addWidget(user_title);
     //读入联系人信息，跳转聊天界面 TODO
     QScrollArea *scroll_user=new QScrollArea;
     scroll_user->setStyleSheet("background-color: rgba(255,255,255,0);");
@@ -500,6 +499,7 @@ void MainWindow::setpage6(QWidget* pg){
     chat_pages->setCurrentIndex(0);
 
     QVBoxLayout *layout6=new QVBoxLayout;
+    layout6->addWidget(user_title);
     layout6->addWidget(chat_pages);
 
     pg->setLayout(layout6);
