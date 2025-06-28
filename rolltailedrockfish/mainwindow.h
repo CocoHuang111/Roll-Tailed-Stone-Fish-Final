@@ -21,6 +21,22 @@ class MainWindow;
 }
 QT_END_NAMESPACE
 
+class ResizeButton : public QPushButton {
+    Q_OBJECT
+public:
+    explicit ResizeButton(const QString& text, QWidget *parent = nullptr)
+        : QPushButton(text, parent) {}
+
+protected:
+    void resizeEvent(QResizeEvent *event) override {
+        QPushButton::resizeEvent(event);
+        int newFontSize = event->size().height()/4.5 ;
+        QFont f = font();
+        f.setPointSize(newFontSize);
+        setFont(f);
+    }
+};
+
 class MainWindow : public QWidget
 {
     Q_OBJECT
@@ -48,32 +64,22 @@ private:
     void setpage4(QWidget*);
     void setpage5(QWidget*);
     void setpage6(QWidget*);
-    /*
-    void setpage6();
-    void setpage7();
-*/
+    //void setpage7();
+
+    ResizeButton *btn1;
+    ResizeButton *btn2;
+    ResizeButton *btn3;
+    ResizeButton *btn4;
+    ResizeButton *btn5;
+    ResizeButton *btn6;
+    ResizeButton *btn7;
+
     // page3 search相关
     QList<Book> parseSearchResults(const QByteArray &jsonData);
     void displaySearchResults(const QList<Book> &books, QWidget *container);
     //page4 announce相关
     void saveAnnouncementsToFile(const QList<Announcement> &ann);
     QList<Announcement> readAllAnnouncements();
-};
-
-class ResizeButton : public QPushButton {
-    Q_OBJECT
-public:
-    explicit ResizeButton(const QString& text, QWidget *parent = nullptr)
-        : QPushButton(text, parent) {}
-
-protected:
-    void resizeEvent(QResizeEvent *event) override {
-        QPushButton::resizeEvent(event);
-        int newFontSize = event->size().height()/4.5 ;
-        QFont f = font();
-        f.setPointSize(newFontSize);
-        setFont(f);
-    }
 };
 
 #endif // MAINWINDOW_H
