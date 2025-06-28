@@ -455,9 +455,8 @@ void MainWindow::setpage3(QWidget* pg){
     pg->setLayout(layout3);
 }
 
-void saveAnnouncementsToFile(const QList<Announcement> &announcements) {
+void MainWindow::saveAnnouncementsToFile(const QList<Announcement> &announcements) {
     QJsonArray array;
-Add commentMore actions
     for(const Announcement &ann : announcements) {
         array.append(ann.toJson());
     }
@@ -473,7 +472,7 @@ Add commentMore actions
         qDebug() << "无法打开文件进行写入:" << file.errorString();
     }
 }
-QList<Announcement> readAllAnnouncements() {
+QList<Announcement> MainWindow::readAllAnnouncements() {
     QList<Announcement> announcements;
 
     QFile file("announcements.json");
