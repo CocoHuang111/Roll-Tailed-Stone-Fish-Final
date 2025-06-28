@@ -347,7 +347,8 @@ void MainWindow::displaySearchResults(const QList<Book> &books, QWidget *contain
 }
 
 void MainWindow::setpage3(QWidget* pg){
-    QLineEdit *search_column=new QLineEdit("搜索：");
+    QLineEdit *search_column=new QLineEdit();
+    search_column->setPlaceholderText("搜索： ");
     search_column->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     QString search_content=search_column->text();
     ResizeButton *search_confirm=new ResizeButton("确定");
