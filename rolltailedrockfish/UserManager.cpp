@@ -14,6 +14,10 @@ UserManager::~UserManager() {
 }
 
 bool UserManager::createUser(const QString &username, const QString &password, const QString &contact) {
+    if (username.isEmpty()) {
+        qDebug() << "用户名不能为空";
+        return false;
+    }
     // 1. 检查用户名是否已存在
     if (users.find(username) != users.end()) {
         qDebug() << "用户名已存在:" << username;
