@@ -167,6 +167,7 @@ void MainWindow::setpage1(QWidget* pg){
     connect(startnew,&QPushButton::clicked,[=](){
         RegisterDialog *reg_diag = new RegisterDialog(this);
         reg_diag->show();
+        //if (reg_diag->exec() == QDialog::Accepted){};
     });
     /*
     登录后的操作 TODO
