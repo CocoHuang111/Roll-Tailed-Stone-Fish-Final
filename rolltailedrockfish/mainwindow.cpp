@@ -455,6 +455,56 @@ void MainWindow::setpage3(QWidget* pg){
     pg->setLayout(layout3);
 }
 
+void saveAnnouncementsToFile(const QList<Announcement> &announcements) {
+    QJsonArray array;
+Add commentMore actions
+    for(const Announcement &ann : announcements) {
+        array.append(ann.toJson());
+    }
+
+    QFile file("announcements.json");
+
+    // 如果文件不存在会自动创建
+    if(file.open(QIODevice::WriteOnly)) {
+        QJsonDocument doc(array);
+        file.write(doc.toJson());
+        file.close();
+    } else {
+        qDebug() << "无法打开文件进行写入:" << file.errorString();
+    }
+}
+QList<Announcement> readAllAnnouncements() {
+    QList<Announcement> announcements;
+
+    QFile file("announcements.json");
+
+    // 如果文件不存在，返回空列表
+    if(!file.exists()) {
+        return announcements;
+    }
+
+    if(file.open(QIODevice::ReadOnly)) {
+        QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
+
+        // 检查是否是有效JSON数组
+        if(doc.isArray()) {
+            QJsonArray array = doc.array();
+
+            for(const QJsonValue &value : array) {
+                if(value.isObject()) {
+                    announcements.append(Announcement::fromJson(value.toObject()));
+                }
+            }
+        }
+
+        file.close();
+    } else {
+        qDebug() << "无法打开文件进行读取:" << file.errorString();
+    }
+
+    return announcements;
+}
+
 void MainWindow::setpage4(QWidget* pg){
     QLabel *community_title=new QLabel("未名湖捞书社区");
     community_title->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -466,7 +516,16 @@ void MainWindow::setpage4(QWidget* pg){
     connect(add_announcement,&QPushButton::clicked,[=](){
         AnnouncementDialog *new_announcement=new AnnouncementDialog(this);
         new_announcement->show();
-        //TODO: if(new_announcement->exec()== QDialog::Accepted){}其中读取到用户输入的内容存在announcement_content中(QString)
+        if(new_announcement->exec()== QDialog::Accepted){Add commentMore actions
+            // TODO current user
+            QString str = "user";
+            Announcement *ann = new Announcement(str, new_announcement->announcement_content);;
+            QList<Announcement> allAnnouncements = readAllAnnouncements();
+
+            allAnnouncements.prepend(*ann);
+            saveAnnouncementsToFile(allAnnouncements);
+            QMessageBox::information(this, "成功", "公告已保存");
+        }
     });
 
     QHBoxLayout *head_layout=new QHBoxLayout;
