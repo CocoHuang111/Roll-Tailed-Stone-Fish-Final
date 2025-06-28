@@ -18,6 +18,9 @@ public:
     User* getUser(const QString& username);
     bool saveUsersToFile();
     bool loadUsersFromFile();
+    bool initialize() {
+        return loadUsersFromFile();
+    }
 };
 
 #endif // USERMANAGER_H
