@@ -17,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::MainWindow)
     ,background(":/image/background.jpg")
+    ,networkManager(new QNetworkAccessManager(this))
     ,current_page(0)
 {
     ui->setupUi(this);
