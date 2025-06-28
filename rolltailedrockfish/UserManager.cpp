@@ -84,20 +84,32 @@ bool UserManager::saveUsersToFile() {
 
 bool UserManager::loadUsersFromFile() {
     QFile file(dataFilePath);
-    if (!file.exists()) return true; // 文件不存在不算错误
+    if (!file.exists()) {
+        qDebug() << "用户数据文件不存在，将创建新文件";
+        return true; // 文件不存在不是错误，首次运行时会创建
+    }
 
     if (!file.open(QIODevice::ReadOnly)) {
-        qWarning() << "文件读取失败:" << file.errorString();
+        qWarning() << "无法打开用户数据文件:" << file.errorString();
         return false;
     }
 
-    // 解析JSON
-    QJsonArray jsonArray = QJsonDocument::fromJson(file.readAll()).array();
-    for (const auto& userJson : jsonArray) {
-        User* user = User::fromJson(userJson.toObject());
+    // 读取并解析JSON
+    QByteArray jsonData = file.readAll();
+    QJsonDocument doc = QJsonDocument::fromJson(jsonData);
+    if (doc.isNull()) {
+        qWarning() << "用户数据文件格式错误";
+        return false;
+    }
+
+    QJsonArray jsonArray = doc.array();
+    for (const QJsonValue& value : jsonArray) {
+        User* user = User::fromJson(value.toObject());
         if (user) {
             users[QString::fromStdString(user->username)] = user;
         }
     }
+
+    qDebug() << "成功加载" << users.size() << "个用户";
     return true;
 }
