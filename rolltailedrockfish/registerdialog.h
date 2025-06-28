@@ -2,6 +2,7 @@
 #define REGISTERDIALOG_H
 
 #include <QDialog>
+#include <QLineEdit>
 
 class RegisterDialog : public QDialog
 {Q_OBJECT
