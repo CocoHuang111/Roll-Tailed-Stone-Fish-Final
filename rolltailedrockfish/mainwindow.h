@@ -13,6 +13,7 @@
 #include "UserManager.h"
 #include <QStackedWidget>
 #include <QLabel>
+#include "Announcement.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -54,6 +55,9 @@ private:
     // page3 search相关
     QList<Book> parseSearchResults(const QByteArray &jsonData);
     void displaySearchResults(const QList<Book> &books, QWidget *container);
+    //page4 announce相关
+    void saveAnnouncementsToFile(const QList<Announcement> &ann);
+    QList<Announcement> readAllAnnouncements();
 };
 
 class ResizeButton : public QPushButton {
