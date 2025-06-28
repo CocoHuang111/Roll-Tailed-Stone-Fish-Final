@@ -11,6 +11,7 @@
 #include <QJsonArray>
 #include "Book.h"
 #include "UserManager.h"
+#include <QStackedWidget>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -26,6 +27,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     UserManager qy;
+    QStackedWidget *MainArea=new QStackedWidget;
 
 protected:
     void paintEvent(QPaintEvent *event) override;
