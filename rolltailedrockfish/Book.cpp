@@ -7,33 +7,72 @@ bool Book::operator==(const Book &other) const {
 
 QJsonObject Book::toJson() const {
     QJsonObject obj;
+
+    // 基础信息
     obj["title"] = title;
     obj["author"] = author;
     obj["publisher"] = publisher;
     obj["publishYear"] = publishYear;
     obj["isbn"] = isbn;
+    obj["price"] = price;
+    obj["description"] = description;
+    obj["coverImage"] = coverImage;
+    obj["sellerId"] = sellerId;
+    obj["buyerId"] = buyerId;
+    obj["isSold"] = isSold;
+
+    // 特殊类型处理
+    obj["listedTime"] = listedTime.toString(Qt::ISODate);
 
     QJsonArray tagsArray;
-    for (const auto& tag : tags) {
+    for (const QString& tag : tags) {
         tagsArray.append(tag);
     }
     obj["tags"] = tagsArray;
 
-    obj["price"] = price;
-    obj["description"] = description;
-    obj["coverImage"] = coverImage;
-    obj["listedTime"] = listedTime.toString(Qt::ISODate);
-    obj["sellerId"] = sellerId;
-
     return obj;
 }
 
-Book Book::fromJson(const QJsonObject &obj) {
-    Book book;
-    book.title = obj["title"].toString();
-    book.author = obj["author"].toString();
-    // 其他字段...
-    return book;
+Book* Book::fromJson(const QJsonObject &obj) {
+    if (obj.isEmpty()) return nullptr;
+
+    try {
+        // 必需字段检查
+        if (!obj.contains("title") || !obj.contains("isbn")) {
+            throw std::invalid_argument("Missing required fields");
+        }
+
+        // 构造对象
+        Book* book = new Book();
+
+        // 基础字段
+        book->title = obj["title"].toString();
+        book->author = obj["author"].toString();
+        book->publisher = obj["publisher"].toString();
+        book->publishYear = obj["publishYear"].toInt();
+        book->isbn = obj["isbn"].toString();
+        book->price = obj["price"].toDouble();
+        book->description = obj["description"].toString();
+        book->coverImage = obj["coverImage"].toString();
+        book->sellerId = obj["sellerId"].toString();
+        book->buyerId = obj["buyerId"].toString();
+        book->isSold = obj["isSold"].toBool();
+
+        // 特殊类型处理
+        book->listedTime = QDateTime::fromString(obj["listedTime"].toString(), Qt::ISODate);
+
+        // 反序列化标签列表
+        if (obj.contains("tags")) {
+            QJsonArray tagsArray = obj["tags"].toArray();
+            for (const QJsonValue& tag : tagsArray) {
+                book->tags.append(tag.toString());
+            }
+        }
+        return book;
+    } catch (const std::exception& e) {
+        qWarning() << "Book反序列化失败:" << e.what();
+        return nullptr;
+    }
 }
 
 bool Book::saveToFile(const QList<Book>& books, const QString& filePath) {
@@ -80,7 +119,7 @@ QList<Book> Book::loadFromFile(const QString& filePath) {
     QJsonArray jsonArray = doc.array();
     for (const QJsonValue& value : jsonArray) {
         QJsonObject obj = value.toObject();
-        books.append(Book::fromJson(obj)); // 复用现有的fromJson方法
+        books.append(*Book::fromJson(obj)); // 复用现有的fromJson方法
     }
 
     return books;
