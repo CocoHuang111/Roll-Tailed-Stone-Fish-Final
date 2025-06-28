@@ -178,14 +178,17 @@ void MainWindow::setpage1(QWidget* pg){
         RegisterDialog *reg_diag = new RegisterDialog(this);
         reg_diag->show();
         bool flag = true;
-        while(flag && reg_diag->exec() == QDialog::Accepted){
-            if (qy.createUser(reg_diag->username, reg_diag->password, reg_diag->contact)) {
-                flag = false;
-                //ui->stackedWidget->setCurrentIndex(1);  // 跳转到登录页面
+        if (reg_diag->exec() == QDialog::Accepted) {
+            QString username = reg_diag->getUsername();
+            QString password = reg_diag->getPassword();
+            QString contact = reg_diag->getContact();
+
+            if (qy.createUser(username, password, contact)) {
+                QMessageBox::information(this, "成功", "注册成功！");
             } else {
                 QMessageBox::critical(this, "错误", "用户名已存在！");
             }
-        };
+        }
     });
     /*
     登录后的操作 TODO
