@@ -245,8 +245,8 @@ void MainWindow::setpage2(QWidget* pg){
     );
     title->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    QLabel *username=new QLabel("用户名：");
-    username->setStyleSheet(
+    usernameLabel = new QLabel("用户名：", pg); // 初始化
+    usernameLabel->setStyleSheet(
         "background-color: rgba(120, 170, 255);"
         "color:white;"
         "border:3px solid white;"
@@ -254,18 +254,9 @@ void MainWindow::setpage2(QWidget* pg){
         " padding: 8px;"
         "font-size: 20px;"
     );
-    QLabel *contact=new QLabel("联系方式：");
-    contact->setStyleSheet(
-        "background-color: rgba(120, 170, 255);"
-        "color:white;"
-        "border:3px solid white;"
-        "border-radius:20px;"
-        " padding: 8px;"
-        "font-size: 20px;"
-    );
-    QLabel *address=new QLabel("常用交易地址：");
 
-    address->setStyleSheet(
+    contactLabel = new QLabel("联系方式：",pg);
+    contactLabel->setStyleSheet(
         "background-color: rgba(120, 170, 255);"
         "color:white;"
         "border:3px solid white;"
@@ -273,6 +264,7 @@ void MainWindow::setpage2(QWidget* pg){
         " padding: 8px;"
         "font-size: 20px;"
     );
+
     QLabel *book_on_sale=new QLabel("在售书籍：");
     book_on_sale->setStyleSheet(
         "background-color: rgba(120, 170, 255);"
@@ -308,11 +300,9 @@ void MainWindow::setpage2(QWidget* pg){
     layout2->setSpacing(20);
     layout2->addWidget(title,2);
     //layout2->addStretch();
-    layout2->addWidget(username,1);
+    layout2->addWidget(usernameLabel,1);
     //layout2->addStretch();
-    layout2->addWidget(contact,1);
-    //layout2->addStretch();
-    layout2->addWidget(address,1);
+    layout2->addWidget(contactLabel,1);
     //layout2->addStretch();
     layout2->addWidget(book_on_sale,1);
     //layout2->addStretch();
