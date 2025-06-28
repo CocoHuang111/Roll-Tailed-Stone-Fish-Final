@@ -237,6 +237,23 @@ void MainWindow::setpage1(QWidget* pg){
     pg->setLayout(layout1);
 }
 
+void MainWindow::updateUserInfo() {
+    if(usernameLabel) {
+        QString text = "用户名：";
+        if(currentUser) {
+            text += QString::fromStdString(currentUser->username);
+            qDebug() << "更新用户名显示：" << text;
+        }
+        usernameLabel->setText(text);
+
+        QString contactText = "联系方式：";
+        if(currentUser) {
+            contactText += QString::fromStdString(currentUser->contact);
+        }
+        contactLabel->setText(contactText);
+    }
+}
+
 void MainWindow::setpage2(QWidget* pg){
     QLabel *title=new QLabel("个人信息");
     title->setStyleSheet(
