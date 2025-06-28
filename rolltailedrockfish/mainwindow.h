@@ -31,6 +31,7 @@ protected:
 private:
     Ui::MainWindow *ui;
     QPixmap background;
+    QNetworkAccessManager *networkManager;
     int current_page;
     void setpage1(QWidget*);
     void setpage2(QWidget*);
