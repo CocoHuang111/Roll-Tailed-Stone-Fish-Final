@@ -6,8 +6,6 @@ User::User(const std::string& name, const std::string& pwd,
            const std::string& contactInfo, double initialTokens)
     : username(name), password(pwd), contact(contactInfo), tokens(initialTokens) {}
 
-// 其他成员函数实现...
-
 QJsonObject User::toJson() const {
     QJsonObject obj;
     obj["username"] = QString::fromStdString(username);
@@ -20,6 +18,17 @@ QJsonObject User::toJson() const {
         prefsArray.append(QString::fromStdString(pref));
     }
     obj["preferences"] = prefsArray;
+
+    QJsonArray transArray;
+    for (const auto& record : transactionHistory) {
+        QJsonObject transJson;
+        transJson["time"] = record.time.toString(Qt::ISODate);
+        transJson["type"] = record.type;
+        transJson["amount"] = record.amount;
+        transJson["detail"] = record.detail;
+        transArray.append(transJson);
+    }
+    obj["transactionHistory"] = transArray;
 
     QJsonArray booksArray;
     for (const auto& book : booksOnSale) {
@@ -45,6 +54,36 @@ User* User::fromJson(const QJsonObject& obj) {
         );
 
     // 反序列化其他字段...
+    // 反序列化偏好标签
+    QJsonArray prefsArray = obj["preferences"].toArray();
+    for (const QJsonValue& pref : prefsArray) {
+        user->preferences.insert(pref.toString().toStdString());
+    }
+
+    // 反序列化交易记录
+    QJsonArray transArray = obj["transactionHistory"].toArray();
+    for (const QJsonValue& trans : transArray) {
+        QJsonObject transObj = trans.toObject();
+        TransactionRecord record;
+        record.time = QDateTime::fromString(transObj["time"].toString(), Qt::ISODate);
+        record.type = transObj["type"].toString();
+        record.amount = transObj["amount"].toDouble();
+        record.detail = transObj["detail"].toString();
+        user->transactionHistory.push_back(record);
+    }
+
+    // 反序列化在售书籍
+    QJsonArray booksArray = obj["booksOnSale"].toArray();
+    for (const QJsonValue& book : booksArray) {
+        user->booksOnSale.push_back(Book::fromJson(book.toObject()));
+    }
+
+    // 反序列化成就列表
+    QJsonArray achievementsArray = obj["achievements"].toArray();
+    for (const QJsonValue& ach : achievementsArray) {
+        user->achievements.push_back(ach.toString().toStdString());
+    }
+
     return user;
 }
 
@@ -75,7 +114,7 @@ void User::addBookForSale(Book* book) {
     }
 }
 
-const vector<Book*>& User::getBooksOnSale() const {
+const std::vector<Book*>& User::getBooksOnSale() const {
     return booksOnSale;
 }
 
@@ -110,11 +149,10 @@ bool User::purchaseBook(Book* book) {
     return true;
 }
 
-const vector<User::TransactionRecord>& User::getTransactionHistory() const {
+const std::vector<User::TransactionRecord>& User::getTransactionHistory() const {
     return transactionHistory;
 }
 
-//这个是记录交易功能（选择性添加）
 void User::addTransactionRecord(const TransactionRecord& record) {
     transactionHistory.push_back(record);
 }
