@@ -17,6 +17,7 @@
 #include "UserManager.h"
 #include "announcementdialog.h"
 
+User* currentUser = nullptr;
 MainWindow::MainWindow(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::MainWindow)
@@ -173,7 +174,7 @@ void MainWindow::setpage1(QWidget* pg){
     login->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     loginbtns->addWidget(startnew,1);
     loginbtns->addWidget(login,1);
-    //注册后的操作 TODO
+    
     connect(startnew,&QPushButton::clicked,[=](){
         RegisterDialog *reg_diag = new RegisterDialog(this);
         reg_diag->show();
@@ -190,11 +191,33 @@ void MainWindow::setpage1(QWidget* pg){
             }
         }
     });
-    /*
-    登录后的操作 TODO
-    connect(startnew,&QPushButton::clicked,[=](){
+    
+    connect(login,&QPushButton::clicked,[=](){
+        // name password
+        // 1. 输入验证
+        if (name.isEmpty() || password.isEmpty()) {
+            QMessageBox::warning(this, "输入错误", "用户名和密码不能为空");
+            return;
+        }
 
-    })*/
+        // 2. 调用UserManager验证登录
+        User* user = qy.getUser(name);
+
+        // 3. 验证用户是否存在及密码是否正确
+        if (!user || !user->verifyPassword(password.toStdString())) {
+            QMessageBox::critical(this, "登录失败", "用户名或密码错误");
+
+            // 安全建议：清空密码框
+            pwdInput->clear();
+
+            return;
+        }
+
+        // 4. 登录成功处理
+        QMessageBox::information(this, "成功", "登录成功！");
+        currentUser = user;
+        MainArea->setCurrentIndex(1);
+    });
 
     QVBoxLayout *fill_in=new QVBoxLayout;
     fill_in->setContentsMargins(200, 0, 200, 60);
