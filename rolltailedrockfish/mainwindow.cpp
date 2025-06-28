@@ -34,13 +34,13 @@ MainWindow::MainWindow(QWidget *parent)
 
     //左侧菜单栏
     QVBoxLayout *leftLayout=new QVBoxLayout;
-    ResizeButton *btn1 = new ResizeButton("登陆/注册");
-    ResizeButton *btn2 = new ResizeButton("我的主页");
-    ResizeButton *btn3 = new ResizeButton("钓  书");
-    ResizeButton *btn4 = new ResizeButton("捞  书");
-    ResizeButton *btn5 = new ResizeButton("放  生");
-    ResizeButton *btn6 = new ResizeButton("聊天墙");
-    ResizeButton *btn7 = new ResizeButton("成就墙");
+    btn1 = new ResizeButton("登陆/注册");
+    btn2 = new ResizeButton("我的主页");
+    btn3 = new ResizeButton("钓  书");
+    btn4 = new ResizeButton("捞  书");
+    btn5 = new ResizeButton("放  生");
+    btn6 = new ResizeButton("聊天墙");
+    btn7 = new ResizeButton("成就墙");
     QWidget *menu = new QWidget;
     QList<ResizeButton*> buttons = {btn1, btn2, btn3, btn4, btn5, btn6, btn7};
     leftLayout->setSpacing(20);
@@ -219,6 +219,28 @@ void MainWindow::setpage1(QWidget* pg){
         currentUser = user;
         updateUserInfo();  // 立即刷新
         MainArea->setCurrentIndex(1);
+                btn2->setStyleSheet(
+            "QPushButton{"
+            "background-color: rgb(120, 170, 255);"
+            "color:white;"
+            "border:3px solid white;"
+            "border-radius:20px;"
+            " padding: 8px;"
+            "}"
+            );
+        btn1->setStyleSheet(
+            "QPushButton{"
+            "background-color: rgba(73, 150, 255, 158);"
+            "color:white;"
+            "border:3px solid white;"
+            "border-radius:20px;"
+            " padding: 8px;"
+            "}"
+            "QPushButton:hover{"
+            "background-color: rgb(120, 170, 255);"
+            "}"
+            );
+        current_page=1;
     });
 
     QVBoxLayout *fill_in=new QVBoxLayout;
