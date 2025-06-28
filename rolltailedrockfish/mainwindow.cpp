@@ -26,6 +26,10 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     setAutoFillBackground(false);
+    if (!qy.initialize()) {
+        qCritical() << "无法初始化用户管理器";
+        // 处理错误情况
+    }
 
     //左侧菜单栏
     QVBoxLayout *leftLayout=new QVBoxLayout;
