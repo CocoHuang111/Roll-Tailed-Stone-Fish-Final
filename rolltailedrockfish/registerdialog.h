@@ -10,7 +10,6 @@ public:
     QString username;
     QString password;
     QString contact;
-    QString address;
 };
 
 #endif // REGISTERDIALOG_H
