@@ -515,7 +515,7 @@ void MainWindow::setpage4(QWidget* pg){
     connect(add_announcement,&QPushButton::clicked,[=](){
         AnnouncementDialog *new_announcement=new AnnouncementDialog(this);
         new_announcement->show();
-        if(new_announcement->exec()== QDialog::Accepted){Add commentMore actions
+        if(new_announcement->exec()== QDialog::Accepted){
             // TODO current user
             QString str = "user";
             Announcement *ann = new Announcement(str, new_announcement->announcement_content);;
