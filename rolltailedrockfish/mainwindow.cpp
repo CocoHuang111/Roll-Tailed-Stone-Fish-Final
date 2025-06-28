@@ -174,7 +174,7 @@ void MainWindow::setpage1(QWidget* pg){
         reg_diag->show();
         bool flag = true;
         while(flag && reg_diag->exec() == QDialog::Accepted){
-            if (qy.createUser(reg_diag->username, reg_diag->password, reg_diag->contact, reg_diag->address)) {
+            if (qy.createUser(reg_diag->username, reg_diag->password, reg_diag->contact)) {
                 flag = false;
                 //ui->stackedWidget->setCurrentIndex(1);  // 跳转到登录页面
             } else {
