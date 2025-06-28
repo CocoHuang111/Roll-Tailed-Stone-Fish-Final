@@ -42,28 +42,44 @@ User* UserManager::getUser(const QString& username) {
 }
 
 bool UserManager::saveUsersToFile() {
+    // 1. 准备JSON数据
     QJsonArray jsonArray;
-
-    // 确保目录存在
-    QFileInfo fileInfo(dataFilePath);
-    if (!QDir().mkpath(fileInfo.path())) {
-        qWarning() << "无法创建目录:" << fileInfo.path();
-        return false;
-    }
-
-    // 构建JSON数据
     for (const auto& [username, user] : users) {
         jsonArray.append(user->toJson());
     }
 
-    // 原子写入（避免数据损坏）
-    QSaveFile file(dataFilePath);
-    if (!file.open(QIODevice::WriteOnly)) {
-        qWarning() << "文件打开失败:" << file.errorString();
+    // 2. 确保目录存在（使用绝对路径）
+    QFileInfo fileInfo(dataFilePath);
+    QDir dir = fileInfo.dir();
+    if (!dir.exists() && !dir.mkpath(".")) {
+        qWarning() << "无法创建目录:" << dir.absolutePath();
         return false;
     }
-    file.write(QJsonDocument(jsonArray).toJson());
-    return file.commit(); // 只有成功才会替换原文件
+
+    // 3. 使用QSaveFile进行原子写入
+    QSaveFile file(fileInfo.absoluteFilePath());
+    if (!file.open(QIODevice::WriteOnly)) {
+        qWarning() << "文件打开失败:" << file.errorString()
+            << "路径:" << fileInfo.absoluteFilePath();
+        return false;
+    }
+
+    // 4. 写入数据
+    QJsonDocument doc(jsonArray);
+    qint64 bytesWritten = file.write(doc.toJson(QJsonDocument::Indented));
+    if (bytesWritten == -1) {
+        qWarning() << "写入文件失败:" << file.errorString();
+        return false;
+    }
+
+    // 5. 提交更改（只有成功才会替换原文件）
+    if (!file.commit()) {
+        qWarning() << "文件提交失败:" << file.errorString();
+        return false;
+    }
+
+    qDebug() << "用户数据成功保存到:" << fileInfo.absoluteFilePath();
+    return true;
 }
 
 bool UserManager::loadUsersFromFile() {
