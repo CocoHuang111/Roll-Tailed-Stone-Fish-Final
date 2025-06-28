@@ -12,6 +12,9 @@
 #include <QMessageBox>
 #include "registerdialog.h"
 #include "findbookdialog.h"
+#include "Book.h"
+#include "User.h"
+#include "UserManager.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QWidget(parent)
