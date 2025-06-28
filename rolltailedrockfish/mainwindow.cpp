@@ -425,8 +425,10 @@ void MainWindow::setpage4(QWidget* pg){
     QVBoxLayout *scroll_layout=new QVBoxLayout;
     //读入所有公告 TODO
     QWidget *scroll_page=new QWidget;
+    scroll_page->setStyleSheet("background-color: rgba(255,255,255,0);");
     scroll_page->setLayout(scroll_layout);
     QScrollArea *scroll=new QScrollArea;
+    scroll->setStyleSheet("background-color: rgba(255,255,255,0);");
     scroll->setWidget(scroll_page);
     scroll->setWidgetResizable(true);
 
@@ -483,11 +485,13 @@ void MainWindow::setpage6(QWidget* pg){
     user_layout->addWidget(user_title);
     //读入联系人信息，跳转聊天界面 TODO
     QScrollArea *scroll_user=new QScrollArea;
+    scroll_user->setStyleSheet("background-color: rgba(255,255,255,0);");
     scroll_user->setLayout(user_layout);
 
     QVBoxLayout *chat_layout=new QVBoxLayout;
     //聊天界面，读取聊天记录
     QScrollArea *scroll_chat=new QScrollArea;
+    scroll_chat->setStyleSheet("background-color: rgba(255,255,255,0);");
     scroll_chat->setLayout(chat_layout);
 
     QStackedWidget *chat_pages=new QStackedWidget;
