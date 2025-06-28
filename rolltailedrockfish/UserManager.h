@@ -15,7 +15,7 @@ public:
     QString dataFilePath = "users.json";
 
     ~UserManager();
-    bool createUser(const QString& username, const QString& password, const QString& contact);
+    bool createUser(const QString& username, const QString& password, const QString& contact, const QString& address);
     User* getUser(const QString& username);
     bool saveUsersToFile();
     bool loadUsersFromFile();
