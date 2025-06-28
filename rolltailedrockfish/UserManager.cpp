@@ -10,7 +10,7 @@ UserManager::~UserManager() {
     for (auto& pair : users) delete pair.second;
 }
 
-bool UserManager::createUser(const QString &username, const QString &password, const QString &contact, const QString &address) {
+bool UserManager::createUser(const QString &username, const QString &password, const QString &contact) {
     // 1. 检查用户名是否已存在
     if (users.find(username) != users.end()) {
         qDebug() << "用户名已存在:" << username;
@@ -21,8 +21,7 @@ bool UserManager::createUser(const QString &username, const QString &password, c
     User *newUser = new User(
         username.toStdString(),
         password.toStdString(),  // 注意：实际项目应存储密码的哈希值，而非明文！
-        contact.toStdString(),
-        address.toStdString()
+        contact.toStdString()
         );
 
     // 3. 添加到用户列表
