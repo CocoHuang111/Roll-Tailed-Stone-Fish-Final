@@ -39,4 +39,9 @@ RegisterDialog::RegisterDialog(QWidget *parent) : QDialog(parent) {
 
     setLayout(mainLayout);
     setFixedSize(400, 200);  // 可选：设置窗口大小
+
+    QString username=usernameEdit->text();
+    QString password=passwordEdit->text();
+    QString Contact=ContactEdit->text();
+    QString address=addressEdit->text();
 }
