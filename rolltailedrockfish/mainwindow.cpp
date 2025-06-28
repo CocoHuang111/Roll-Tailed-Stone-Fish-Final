@@ -540,7 +540,9 @@ void MainWindow::setpage4(QWidget* pg){
         if(new_announcement->exec()== QDialog::Accepted){
             // TODO current user
             QString str = "user";
-            Announcement *ann = new Announcement(str, new_announcement->announcement_content);;
+            QString content = new_announcement->content();
+            Announcement *ann = new Announcement(str, content);
+
             QList<Announcement> allAnnouncements = readAllAnnouncements();
 
             allAnnouncements.prepend(*ann);
