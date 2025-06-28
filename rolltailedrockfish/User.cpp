@@ -88,15 +88,7 @@ User* User::fromJson(const QJsonObject& obj) {
 }
 
 bool User::verifyPassword(const std::string& inputPassword) const {
-    // 实际项目应对密码进行哈希后比较（示例使用SHA256）
-    QByteArray hashedInput = QCryptographicHash::hash(
-                                 QByteArray::fromStdString(inputPassword),
-                                 QCryptographicHash::Sha256
-                                 ).toHex();
-
-    QByteArray storedPwdHash = QString::fromStdString(password).toUtf8();
-
-    return hashedInput == storedPwdHash;  // 常量时间比较防止时序攻击
+    return password == inputPassword;
 }
 
 bool User::removeBookFromSale(Book* book) {
