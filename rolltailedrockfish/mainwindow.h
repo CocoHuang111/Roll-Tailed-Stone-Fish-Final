@@ -5,6 +5,11 @@
 #include <QPixmap>
 #include <QPushButton>
 #include <QResizeEvent>
+#include <QNetworkAccessManager>
+#include <QUrlQuery>
+#include <QNetworkReply>
+#include <QJsonArray>
+#include "Book.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -37,6 +42,9 @@ private:
     void setpage6();
     void setpage7();
 */
+    // page3 search相关
+    QList<Book> parseSearchResults(const QByteArray &jsonData);
+    void displaySearchResults(const QList<Book> &books, QWidget *container);
 };
 
 class ResizeButton : public QPushButton {
