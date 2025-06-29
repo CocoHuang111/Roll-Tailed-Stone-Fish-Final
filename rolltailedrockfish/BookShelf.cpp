@@ -99,7 +99,7 @@ bool BookShelf::updateBook(const Book* book) {
 
     for (auto &b : books) {
         if (b->isbn == book->isbn) {
-            *b = book;
+            *b = *book;
             return true;
         }
     }
