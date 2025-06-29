@@ -55,6 +55,8 @@ public:
         isSold(isSold),
         buyerId(buyerId)
     {}
+    
+    Book(const Book* other);
     // 辅助函数
     bool operator==(const Book &other) const;
     QJsonObject toJson() const;
