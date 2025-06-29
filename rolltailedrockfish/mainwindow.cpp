@@ -21,6 +21,7 @@ User* currentUser = nullptr;
 MainWindow::MainWindow(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::MainWindow)
+    , bs()
     ,background(":/image/background.jpg")
     ,networkManager(new QNetworkAccessManager(this))
     ,current_page(0)
@@ -721,7 +722,23 @@ void MainWindow::setpage5(QWidget* pg){
     //添加新书的后续操作 TODO
     connect(add_book,&QPushButton::clicked,[=](){
         FindbookDialog *addbook=new FindbookDialog(this);
-        addbook->show();//书名变量为bookname
+        if (addbook->exec() == QDialog::Accepted) {
+            if(!currentUser) QMessageBox::critical(this, "错误", "未登陆！");
+            else{
+                Book* book = new Book(addbook->getBookname());
+                if (bs.addBook(book)) {  // 假设addBook接受Book引用
+                    if (bs.saveToFile()) {  // 保存到文件
+                        QMessageBox::information(this, "成功", "上传成功！");
+                    } else {
+                        QMessageBox::critical(this, "错误", "保存文件失败！");
+                    }
+                } else {
+                    QMessageBox::critical(this, "错误", "书籍已上传过！");
+                    delete book;  // 添加失败时释放内存
+                }
+            }
+        }
+        addbook->deleteLater();  // 安全删除对话框
     });
 
     QHBoxLayout *headline=new QHBoxLayout;
