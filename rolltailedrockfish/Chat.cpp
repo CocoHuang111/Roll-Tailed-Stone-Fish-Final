@@ -24,8 +24,22 @@ ChatMessage ChatMessage::fromJson(const QJsonObject& json) {
         );
 }
 
-Chat::Chat(const QString& user1, const QString& user2)
-    : user1(user1), user2(user2) {}
+Chat::Chat(const QString& user1, const QString& user2): user1(user1), user2(user2) {
+    QString filename = "chats/" + getChatFileName(user1, user2);
+    QFile file(filename);
+
+    if (file.exists() && file.open(QIODevice::ReadOnly)) {
+        QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
+        QJsonObject json = doc.object();
+
+        // 反序列化已有消息
+        QJsonArray msgArray = json["messages"].toArray();
+        for (const QJsonValue& val : msgArray) {
+            messages.append(ChatMessage::fromJson(val.toObject()));
+        }
+        file.close();
+    }
+}
 
 void Chat::addMessage(const QString& sender, const QString& content) {
     messages.append(ChatMessage(sender, content));
@@ -73,17 +87,31 @@ QString Chat::getChatFileName(const QString& user1, const QString& user2) {
     return QString("chat_%1_%2.json").arg(users[0], users[1]);
 }
 
-Chat Chat::loadChat(const QString& user1, const QString& user2) {
-    QString filename = "chats/" + getChatFileName(user1, user2);
-    QFile file(filename);
+QList<QString> Chat::getContacts(const QString& currentUser) {
+    QList<QString> contacts;
+    QDir dir("chats");
 
-    if (file.open(QIODevice::ReadOnly)) {
-        QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
-        file.close();
-        return fromJson(doc.object());
+    // 获取所有聊天记录文件
+    QStringList filters;
+    filters << "chat_*.json";
+    dir.setNameFilters(filters);
+
+    foreach (QFileInfo fileInfo, dir.entryInfoList()) {
+        QString filename = fileInfo.fileName();
+
+        // 解析文件名格式 chat_user1_user2.json
+        QStringList parts = filename.mid(5, filename.length()-10).split('_');
+        if (parts.size() == 2) {
+            QString user1 = parts[0];
+            QString user2 = parts[1];
+
+            if (user1 == currentUser) {
+                if (!contacts.contains(user2)) contacts.append(user2);
+            } else if (user2 == currentUser) {
+                if (!contacts.contains(user1)) contacts.append(user1);
+            }
+        }
     }
 
-    // 文件不存在时返回新Chat对象
-    return Chat(user1, user2);
+    return contacts;
 }
-
