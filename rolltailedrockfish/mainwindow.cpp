@@ -651,7 +651,7 @@ void MainWindow::setpage5(QWidget* pg){
     //添加新书的后续操作 TODO
     connect(add_book,&QPushButton::clicked,[=](){
         FindbookDialog *addbook=new FindbookDialog(this);
-        addbook->show();
+        addbook->show();//书名变量为bookname
     });
 
     QHBoxLayout *headline=new QHBoxLayout;
