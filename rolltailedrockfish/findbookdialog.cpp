@@ -10,15 +10,7 @@ FindbookDialog::FindbookDialog(QWidget *parent) : QDialog(parent) {
 
     // 创建控件
     QLabel *title = new QLabel("请填写书本信息！");
-    QLineEdit *usernameEdit = new QLineEdit;
-    usernameEdit->setPlaceholderText("请输入用户名");
-    QLineEdit *passwordEdit = new QLineEdit;
-    passwordEdit->setPlaceholderText("请输入密码");
-    passwordEdit->setEchoMode(QLineEdit::Password);
-    QLineEdit *ContactEdit = new QLineEdit;
-    ContactEdit->setPlaceholderText("请输入联系方式");
-    QLineEdit *addressEdit = new QLineEdit;
-    usernameEdit->setPlaceholderText("请输入常用交易地址");
+    QLineEdit *booknameEdit = new QLineEdit;
 
     QPushButton *loginBtn = new QPushButton("确认");
 
@@ -27,10 +19,7 @@ FindbookDialog::FindbookDialog(QWidget *parent) : QDialog(parent) {
 
     // 使用布局
     QFormLayout *formLayout = new QFormLayout;
-    formLayout->addRow("用户名：", usernameEdit);
-    formLayout->addRow("密码：", passwordEdit);
-    formLayout->addRow("联系方式：", ContactEdit);
-    formLayout->addRow("常用交易地址：", addressEdit);
+    formLayout->addRow("书本名称：", booknameEdit);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout->addWidget(title);
