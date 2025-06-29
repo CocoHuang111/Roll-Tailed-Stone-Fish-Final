@@ -1,13 +1,11 @@
 #include "BookShelf.h"
 #include <QJsonArray>
 #include <algorithm>
+#include <QMessageBox>
 
-BookShelf::BookShelf(const QString &storagePath)
-    : m_storagePath(storagePath)
+BookShelf::BookShelf()
 {
-    if (!m_storagePath.isEmpty()) {
-        loadFromFile();
-    }
+    loadFromFile();
 }
 
 bool BookShelf::loadFromFile(const QString &path) {
@@ -36,7 +34,6 @@ bool BookShelf::loadFromFile(const QString &path) {
     return true;
 }
 
-
 bool BookShelf::saveToFile(const QString &path) const {
     QString filePath = path.isEmpty() ? m_storagePath : path;
     if (filePath.isEmpty()) {
@@ -54,15 +51,12 @@ bool BookShelf::saveToFile(const QString &path) const {
     for (const Book* book : books) {
         jsonArray.append(book->toJson());
     }
-
     return file.write(QJsonDocument(jsonArray).toJson()) > 0;
 }
 
-bool BookShelf::validateBook(const Book &book) const {
+bool BookShelf::validateBook(const Book* book) const {
     // 实现你的验证逻辑
-    return !book.isbn.isEmpty()
-           && !book.title.isEmpty()
-           && !book.author.isEmpty();
+    return !book->title.isEmpty();
     // 可以根据需要添加更多验证条件
 }
 
@@ -71,22 +65,24 @@ bool BookShelf::isbnExists(const QString &isbn) const {
                        [&isbn](const Book* b) { return b->isbn == isbn; });
 }
 
-bool BookShelf::addBook(const Book &book) {
+bool BookShelf::addBook(const Book* book) {
     if (!validateBook(book)) {
         qWarning() << "Invalid book data";
         return false;
     }
-
-    if (isbnExists(book.isbn)) {
-        qWarning() << "Book with ISBN" << book.isbn << "already exists";
+    /*
+    QMessageBox::information(nullptr, "调试信息", "运行至此处");
+    if (isbnExists(book->isbn)) {
+        qWarning() << "Book with ISBN" << book->isbn << "already exists";
         return false;
     }
-
-    books.append(new Book(book));
+    */
+    books.append(new Book(*book));
+    saveToFile();
     return true;
 }
 
-bool BookShelf::removeBook(const QString &isbn) {
+bool BookShelf::removeBook(const QString&isbn) {
     auto it = std::find_if(books.begin(), books.end(),
                            [&isbn](const Book* b) { return b->isbn == isbn; });
 
@@ -98,14 +94,15 @@ bool BookShelf::removeBook(const QString &isbn) {
     return false;
 }
 
-bool BookShelf::updateBook(const Book &book) {
+bool BookShelf::updateBook(const Book* book) {
     if (!validateBook(book)) return false;
 
     for (auto &b : books) {
-        if (b->isbn == book.isbn) {
+        if (b->isbn == book->isbn) {
             *b = book;
             return true;
         }
     }
     return false;
 }
+
