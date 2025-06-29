@@ -14,6 +14,8 @@
 #include <QStackedWidget>
 #include <QLabel>
 #include "Announcement.h"
+#include "BookShelf.h"
+#include <QVBoxLayout>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
