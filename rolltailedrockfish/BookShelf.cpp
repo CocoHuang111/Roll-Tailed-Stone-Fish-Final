@@ -8,29 +8,35 @@ BookShelf::BookShelf()
     loadFromFile();
 }
 
-bool BookShelf::loadFromFile(const QString &path) {
+bool BookShelf::saveToFile(const QString &path) const {
     QString filePath = path.isEmpty() ? m_storagePath : path;
     if (filePath.isEmpty()) {
         qWarning() << "No storage path specified";
         return false;
     }
 
+    // 准备要保存的JSON数据
+    QJsonArray jsonArray;
+    for (const Book* book : books) {
+        jsonArray.append(book->toJson());
+    }
+    QByteArray jsonData = QJsonDocument(jsonArray).toJson();
+
+    // 直接打开原文件写入（覆盖模式）
     QFile file(filePath);
-    if (!file.open(QIODevice::ReadOnly)) {
-        qWarning() << "Failed to open file:" << file.errorString();
+    if (!file.open(QIODevice::WriteOnly)) {
+        qWarning() << "Failed to open file for writing:" << file.errorString();
         return false;
     }
 
-    QJsonArray jsonArray = QJsonDocument::fromJson(file.readAll()).array();
-    books.clear();
-
-    for (const QJsonValue &value : jsonArray) {
-        Book* book = Book::fromJson(value.toObject());
-        if (book && !book->isbn.isEmpty()) {
-            books.push_back(book);
-        }
+    // 写入数据
+    if (file.write(jsonData) == -1) {
+        qWarning() << "Failed to write file:" << file.errorString();
+        file.close();
+        return false;
     }
 
+    file.close();
     return true;
 }
 
