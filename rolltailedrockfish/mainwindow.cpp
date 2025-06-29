@@ -674,21 +674,23 @@ void MainWindow::setpage4(QWidget* pg){
     refreshAnnouncements(scroll_layout);
 
     connect(add_announcement,&QPushButton::clicked,[=](){
-        AnnouncementDialog *new_announcement=new AnnouncementDialog(this);
-        new_announcement->show();
-        if(new_announcement->exec()== QDialog::Accepted){
-            // TODO current user
-            QString str = "user";
-            QString content = new_announcement->content();
-            Announcement *ann = new Announcement(str, content);
+        if (currentUser == nullptr) QMessageBox::critical(this, "错误", "未登陆");
+        else {
+            AnnouncementDialog *new_announcement=new AnnouncementDialog(this);
+            new_announcement->show();
+            if(new_announcement->exec()== QDialog::Accepted){
+                QString str = QString::fromStdString(currentUser->username);
+                QString content = new_announcement->content();
+                Announcement *ann = new Announcement(str, content);
 
-            QList<Announcement> allAnnouncements = readAllAnnouncements();
+                QList<Announcement> allAnnouncements = readAllAnnouncements();
 
-            allAnnouncements.prepend(*ann);
-            saveAnnouncementsToFile(allAnnouncements);
-            QMessageBox::information(this, "成功", "公告已保存");
+                allAnnouncements.prepend(*ann);
+                saveAnnouncementsToFile(allAnnouncements);
+                QMessageBox::information(this, "成功", "公告已保存");
+            }
+            refreshAnnouncements(scroll_layout);
         }
-        refreshAnnouncements(scroll_layout);
     });
 
     QVBoxLayout *layout4=new QVBoxLayout;
