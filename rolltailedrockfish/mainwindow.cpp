@@ -703,6 +703,24 @@ void MainWindow::setpage4(QWidget* pg){
 }
 
 
+void MainWindow::refreshOwnerbook(QVBoxLayout* scrollLayout){
+    for(auto book:bs.books){
+        if(book->sellerId==currentUser->username){
+            QPushButton *bookbtn=new QPushButton;
+            connect(bookbtn,&QPushButton::clicked,[=](){
+                bookbtn->setStyleSheet("background-color:white;");
+                DisplayDialog *display=new DisplayDialog(book);
+                display->show();
+                connect(display->contact_seller,&QPushButton::clicked,[=](){
+                    MainArea->setCurrentIndex(5);
+                });
+            });
+            scrollLayout->addWidget(bookbtn);
+        }
+    }
+    scrollLayout->addStretch();
+}
+
 void MainWindow::setpage5(QWidget* pg){
     QLabel *sellbook_title=new QLabel("我的在售书目");
     sellbook_title->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -711,28 +729,36 @@ void MainWindow::setpage5(QWidget* pg){
         "font-size: 30px;"
         );
 
-    QHBoxLayout *book_display=new QHBoxLayout;
+    QVBoxLayout *book_display=new QVBoxLayout;
     //读入在售书目的信息（图片等）TODO
+    refreshOwnerbook(book_display);
+    QWidget* display_page = new QWidget;
+    display_page->setStyleSheet("background-color: rgba(255,255,255,0);");
+    display_page->setLayout(book_display);
+    QScrollArea *scroll_display=new QScrollArea;
+    scroll_display->setStyleSheet("background-color: rgba(255,255,255,0);");
+    scroll_display->setWidget(display_page);
+    scroll_display->setWidgetResizable(true);
 
     ResizeButton *add_book=new ResizeButton("添加新书");
     //添加新书的后续操作 TODO
     connect(add_book,&QPushButton::clicked,[=](){
-        if(!currentUser) {
-            QMessageBox::critical(this, "错误", "未登陆！");
-            return;
-        }
         FindbookDialog *addbook=new FindbookDialog(this);
         if (addbook->exec() == QDialog::Accepted) {
-            Book* book = new Book(addbook->getBook());
-            if (bs.addBook(book)) {  // 假设addBook接受Book引用
-                if (bs.saveToFile()) {  // 保存到文件
-                    QMessageBox::information(this, "成功", "上传成功！");
+            if(!currentUser) QMessageBox::critical(this, "错误", "未登陆！");
+            else{
+                Book* book = new Book(addbook->getBook(QString::fromStdString(currentUser->username)));
+                if (bs.addBook(book)) {  // 假设addBook接受Book引用
+                    if (bs.saveToFile()) {  // 保存到文件
+                        QMessageBox::information(this, "成功", "上传成功！");
+                        refreshOwnerbook(book_display);
+                    } else {
+                        QMessageBox::critical(this, "错误", "保存文件失败！");
+                    }
                 } else {
-                    QMessageBox::critical(this, "错误", "保存文件失败！");
+                    QMessageBox::critical(this, "错误", "书籍已上传过！");
+                    delete book;  // 添加失败时释放内存
                 }
-            } else {
-                QMessageBox::critical(this, "错误", "书籍已上传过！");
-                delete book;  // 添加失败时释放内存
             }
         }
         addbook->deleteLater();  // 安全删除对话框
@@ -746,9 +772,9 @@ void MainWindow::setpage5(QWidget* pg){
 
     QVBoxLayout *layout5=new QVBoxLayout;
     layout5->setContentsMargins(30,35,30,35);
-    layout5->addLayout(headline);
+    layout5->addLayout(headline,1);
     layout5->addStretch();
-    layout5->addLayout(book_display);
+    layout5->addWidget(scroll_display,5);
 
     pg->setLayout(layout5);
 }
