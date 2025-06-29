@@ -93,11 +93,11 @@ FindbookDialog::FindbookDialog(QWidget *parent) : QDialog(parent) {
     setFixedSize(600, 400);  // 可选：设置窗口大小
 }
 
-Book FindbookDialog::getBook(){
+Book FindbookDialog::getBook(QString sellerid){
     QString newtitle=titleEdit->text();
     QString newauthor=authorEdit->text();
     QString newpublisher=publisherEdit->text();
     QString newdescription=descriptionEdit->text();
     double newprice=priceEdit->text().toDouble();
-    return Book(newtitle,newauthor,newpublisher,0,"",newtags,newprice,newdescription);
+    return Book(newtitle,newauthor,newpublisher,0,"",newtags,newprice,newdescription,"",QDateTime::currentDateTime(),sellerid);
 }
