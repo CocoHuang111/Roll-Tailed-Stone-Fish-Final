@@ -12,16 +12,16 @@
 class BookShelf {
 private:
     QList<Book*> books;  // 内存存储
-    QString m_storagePath; // 本地存储路径
-    bool validateBook(const Book &book) const;
-    bool isbnExists(const QString &isbn) const;
+    QString m_storagePath = "books.json"; // 本地存储路径
+    bool validateBook(const Book* book) const;
+    bool isbnExists(const QString& isbn) const;
 
 public:
-    explicit BookShelf(const QString &storagePath = "");
+    BookShelf();
     // 增删改查
-    bool addBook(const Book& book);
+    bool addBook(const Book* book);
     bool removeBook(const QString& isbn);
-    bool updateBook(const Book& book);
+    bool updateBook(const Book* book);
     //Book findBook(const QString& isbn) const;
 
     // 批量操作
