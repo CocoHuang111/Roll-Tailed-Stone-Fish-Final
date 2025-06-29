@@ -5,6 +5,22 @@ bool Book::operator==(const Book &other) const {
     return isbn == other.isbn;
 }
 
+Book::Book(const Book* other) :
+    title(other->title),
+    author(other->author),
+    publisher(other->publisher),
+    publishYear(other->publishYear),
+    isbn(other->isbn),
+    tags(other->tags), // QStringList 有隐式共享，无需深拷贝
+    price(other->price),
+    description(other->description),
+    coverImage(other->coverImage),
+    listedTime(other->listedTime),
+    sellerId(other->sellerId),
+    isSold(other->isSold),
+    buyerId(other->buyerId)
+{}
+
 QJsonObject Book::toJson() const {
     QJsonObject obj;
 
