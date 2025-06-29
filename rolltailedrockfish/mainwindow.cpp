@@ -122,7 +122,6 @@ MainWindow::MainWindow(QWidget *parent)
                 "}"
                 );
             current_page=i;
-            }
         });
     }
 
