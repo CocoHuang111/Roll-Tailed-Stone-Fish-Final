@@ -12,6 +12,7 @@ SOURCES += \
     Announcement.cpp \
     announcementdialog.cpp \
     Book.cpp \
+    BookShelf.cpp \
     Chat.cpp \
     findbookdialog.cpp \
     main.cpp \
@@ -24,6 +25,7 @@ HEADERS += \
     Announcement.h \
     announcementdialog.h \
     Book.h \
+    BookShelf.h \
     Chat.h \
     findbookdialog.h \
     mainwindow.h \
