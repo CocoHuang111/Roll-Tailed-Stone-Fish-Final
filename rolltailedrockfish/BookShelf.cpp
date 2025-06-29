@@ -8,6 +8,28 @@ BookShelf::BookShelf()
     loadFromFile();
 }
 
+bool BookShelf::loadFromFile(const QString &path) {
+    QString filePath = path.isEmpty() ? m_storagePath : path;
+    if (filePath.isEmpty()) {
+        qWarning() << "No storage path specified";
+        return false;
+    }
+
+    QFile file(filePath);
+    if (!file.open(QIODevice::ReadOnly)) {
+        qWarning() << "Failed to open file:" << file.errorString();
+        return false;
+    }
+
+    QJsonArray jsonArray = QJsonDocument::fromJson(file.readAll()).array();
+    for (const QJsonValue &value : jsonArray) {
+        Book* book = Book::fromJson(value.toObject());
+        if(book) books.push_back(book);
+    }
+
+    return true;
+}
+
 bool BookShelf::saveToFile(const QString &path) const {
     QString filePath = path.isEmpty() ? m_storagePath : path;
     if (filePath.isEmpty()) {
@@ -38,26 +60,8 @@ bool BookShelf::saveToFile(const QString &path) const {
 
     file.close();
     return true;
-}
 
-bool BookShelf::saveToFile(const QString &path) const {
-    QString filePath = path.isEmpty() ? m_storagePath : path;
-    if (filePath.isEmpty()) {
-        qWarning() << "No storage path specified";
-        return false;
-    }
 
-    QFile file(filePath);
-    if (!file.open(QIODevice::WriteOnly)) {
-        qWarning() << "Failed to open file:" << file.errorString();
-        return false;
-    }
-
-    QJsonArray jsonArray;
-    for (const Book* book : books) {
-        jsonArray.append(book->toJson());
-    }
-    return file.write(QJsonDocument(jsonArray).toJson()) > 0;
 }
 
 bool BookShelf::validateBook(const Book* book) const {
