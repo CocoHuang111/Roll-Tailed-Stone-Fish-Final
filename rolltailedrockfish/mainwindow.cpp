@@ -748,33 +748,165 @@ void MainWindow::setpage5(QWidget* pg){
     pg->setLayout(layout5);
 }
 
-void MainWindow::setpage6(QWidget* pg){
-    QLabel *user_title=new QLabel("我的联系人");
-    user_title->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    user_title->setStyleSheet(
-        "color:white;"
-        "font-size: 30px;"
+
+void MainWindow::openChatWindow(const QString &contact) {
+    // 清除旧聊天界面
+    QLayoutItem *child;
+    while ((child = chatContainer->layout()->takeAt(0)) != nullptr) {
+        delete child->widget();
+        delete child;
+    }
+
+    // 创建新聊天界面
+    QVBoxLayout *chatLayout = new QVBoxLayout(chatContainer);
+
+    // 返回按钮
+    QPushButton *backBtn = new QPushButton("← 返回联系人列表");
+    backBtn->setStyleSheet("color: white; background: transparent; border: none;");
+    connect(backBtn, &QPushButton::clicked, [this]() {
+        chatContainer->setVisible(false);
+    });
+    chatLayout->addWidget(backBtn);
+
+    // 聊天记录显示区域
+    QTextBrowser *chatDisplay = new QTextBrowser;
+    chatDisplay->setStyleSheet(
+        "background: rgba(255,255,255,0.1);"
+        "color: white;"
+        "border: 1px solid #555;"
+        "border-radius: 5px;"
         );
-    QVBoxLayout *user_layout=new QVBoxLayout;
-    //读入联系人信息，跳转聊天界面 TODO
-    QScrollArea *scroll_user=new QScrollArea;
-    scroll_user->setStyleSheet("background-color: rgba(255,255,255,0);");
-    scroll_user->setLayout(user_layout);
 
-    QVBoxLayout *chat_layout=new QVBoxLayout;
-    //聊天界面，读取聊天记录
-    QScrollArea *scroll_chat=new QScrollArea;
-    scroll_chat->setStyleSheet("background-color: rgba(255,255,255,0);");
-    scroll_chat->setLayout(chat_layout);
+    // 加载聊天记录
+    Chat chat(currentUser->username.c_str(), contact);
+    for (const ChatMessage &msg : chat.messages) {
+        QString msgHtml = QString("<div style='margin: 5px;'>"
+                                  "<b style='color: %1'>%2 (%3):</b>"
+                                  "<p>%4</p>"
+                                  "</div>")
+                              .arg(msg.sender == currentUser->username.c_str() ? "#88ff88" : "#ff8888")
+                              .arg(msg.sender)
+                              .arg(msg.timestamp.toString("hh:mm"))
+                              .arg(msg.content.toHtmlEscaped());
+        chatDisplay->append(msgHtml);
+    }
+    chatLayout->addWidget(chatDisplay);
 
-    QStackedWidget *chat_pages=new QStackedWidget;
-    chat_pages->addWidget(scroll_user);
-    chat_pages->addWidget(scroll_chat);
-    chat_pages->setCurrentIndex(0);
+    // 消息输入区域
+    QHBoxLayout *inputLayout = new QHBoxLayout;
+    QLineEdit *messageInput = new QLineEdit;
+    messageInput->setStyleSheet(
+        "background: rgba(255,255,255,0.2);"
+        "color: white;"
+        "border: 1px solid #555;"
+        "border-radius: 5px;"
+        "padding: 5px;"
+        );
 
-    QVBoxLayout *layout6=new QVBoxLayout;
-    layout6->addWidget(user_title);
-    layout6->addWidget(chat_pages);
+    QPushButton *sendBtn = new QPushButton("发送");
+    sendBtn->setStyleSheet(
+        "background: #4CAF50;"
+        "color: white;"
+        "border: none;"
+        "border-radius: 5px;"
+        "padding: 5px 15px;"
+        );
 
-    pg->setLayout(layout6);
+    inputLayout->addWidget(messageInput, 1);
+    inputLayout->addWidget(sendBtn);
+    chatLayout->addLayout(inputLayout);
+
+    // 发送消息功能
+    connect(sendBtn, &QPushButton::clicked, [this, contact, chatDisplay, messageInput]() {
+        QString content = messageInput->text();
+        if (!content.isEmpty()) {
+            // 保存消息
+            Chat chat(currentUser->username.c_str(), contact);
+            chat.addMessage(currentUser->username.c_str(), content);
+
+            // 更新显示
+            QString msgHtml = QString("<div style='margin: 5px;'>"
+                                      "<b style='color: #88ff88'>%1 (%2):</b>"
+                                      "<p>%3</p>"
+                                      "</div>")
+                                  .arg(currentUser->username.c_str())
+                                  .arg(QDateTime::currentDateTime().toString("hh:mm"))
+                                  .arg(content.toHtmlEscaped());
+            chatDisplay->append(msgHtml);
+
+            messageInput->clear();
+        }
+    });
+
+    // 显示聊天界面
+    chatContainer->setVisible(true);
+}
+
+void MainWindow::setpage6(QWidget* pg){
+
+    QVBoxLayout *mainLayout = new QVBoxLayout(pg);
+
+    if (currentUser == nullptr) {
+        QLabel *loginHint = new QLabel("请先登录以查看联系人！");
+        loginHint->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        loginHint->setStyleSheet("color: white; font-size: 30px;");
+        mainLayout->addWidget(loginHint);
+    }
+
+    else {
+        QLabel *title = new QLabel("我的联系人");
+        title->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        title->setStyleSheet(
+            "color:white;"
+            "font-size: 30px;"
+            );
+        mainLayout->addWidget(title);
+
+        QWidget *contactsWidget = new QWidget;
+        QVBoxLayout *contactsLayout = new QVBoxLayout(contactsWidget);
+
+        QString username = QString::fromStdString(currentUser->username);
+        QList<QString> contacts = Chat::getContacts(username);
+
+        if (contacts.isEmpty()) {
+            QLabel *hint = new QLabel("暂无联系人");
+            hint->setStyleSheet("color: #aaa; font-size: 14px;");
+            contactsLayout->addWidget(hint);
+        }
+
+        else {
+            chatContainer = new QWidget(pg);
+            chatContainer->setVisible(false);
+            mainLayout->addWidget(chatContainer);
+
+            for (const QString &contact : contacts) {
+                QPushButton *contactBtn = new QPushButton(contact);
+                contactBtn->setStyleSheet(
+                    "QPushButton {"
+                    "  background-color: rgba(255,255,255,0.1);"
+                    "  color: white;"
+                    "  border: 1px solid #555;"
+                    "  padding: 10px;"
+                    "  text-align: left;"
+                    "}"
+                    "QPushButton:hover {"
+                    "  background-color: rgba(255,255,255,0.2);"
+                    "}"
+                    );
+
+                connect(contactBtn, &QPushButton::clicked, [this, contact]() {
+                    openChatWindow(contact);
+                });
+
+                contactsLayout->addWidget(contactBtn);
+            }
+        }
+
+        QScrollArea *contactsScroll = new QScrollArea;
+        contactsScroll->setWidgetResizable(true);
+        contactsScroll->setWidget(contactsWidget);
+        contactsScroll->setStyleSheet("background: transparent; border: none;");
+
+        mainLayout->addWidget(contactsScroll);
+    }
 }
