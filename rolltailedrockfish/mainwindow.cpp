@@ -9,6 +9,7 @@
 #include <QLineEdit>
 #include <QFormLayout>
 #include <QScrollArea>
+#include <QTextBrowser>
 #include <QMessageBox>
 #include "registerdialog.h"
 #include "findbookdialog.h"
@@ -16,6 +17,7 @@
 #include "User.h"
 #include "UserManager.h"
 #include "announcementdialog.h"
+#include "Chat.h"
 
 User* currentUser = nullptr;
 MainWindow::MainWindow(QWidget *parent)
@@ -122,6 +124,7 @@ MainWindow::MainWindow(QWidget *parent)
                 "}"
                 );
             current_page=i;
+            if (i == 5) setpage6(page6);
         });
     }
 
@@ -748,6 +751,7 @@ void MainWindow::setpage5(QWidget* pg){
 }
 
 
+
 void MainWindow::openChatWindow(const QString &contact) {
     // 清除旧聊天界面
     QLayoutItem *child;
@@ -841,7 +845,17 @@ void MainWindow::openChatWindow(const QString &contact) {
     chatContainer->setVisible(true);
 }
 
+
 void MainWindow::setpage6(QWidget* pg){
+
+    if (pg->layout()) {
+        QLayoutItem *item;
+        while ((item = pg->layout()->takeAt(0)) != nullptr) {
+            delete item->widget();
+            delete item;
+        }
+        delete pg->layout();
+    }
 
     QVBoxLayout *mainLayout = new QVBoxLayout(pg);
 
@@ -899,6 +913,16 @@ void MainWindow::setpage6(QWidget* pg){
 
                 contactsLayout->addWidget(contactBtn);
             }
+            // 聊天容器初始化
+            if (!chatContainer) {
+                chatContainer = new QWidget(pg);
+                chatContainer->setLayout(new QVBoxLayout());
+                chatContainer->setVisible(false);
+            }
+            mainLayout->addWidget(chatContainer);
+
+            pg->setLayout(mainLayout);
+
         }
 
         QScrollArea *contactsScroll = new QScrollArea;
