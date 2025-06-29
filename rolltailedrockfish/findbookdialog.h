@@ -10,7 +10,7 @@ class FindbookDialog : public QDialog
 public:
     FindbookDialog(QWidget *parent = nullptr);
     QStringList newtags;
-    Book getBook() ;
+    Book getBook(QString sellerid) ;
 private:
     QLineEdit *titleEdit; // 需要将编辑框作为成员变量
     QLineEdit *authorEdit;
