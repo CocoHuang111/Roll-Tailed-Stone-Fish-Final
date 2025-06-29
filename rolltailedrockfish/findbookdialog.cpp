@@ -10,9 +10,7 @@ FindbookDialog::FindbookDialog(QWidget *parent) : QDialog(parent) {
 
     // 创建控件
     QLabel *title = new QLabel("请填写书本信息！");
-    QLineEdit *booknameEdit = new QLineEdit;
-    bookname=booknameEdit->text();
-
+    booknameEdit = new QLineEdit; // 初始化成员变量
     QPushButton *loginBtn = new QPushButton("确认");
 
     // 连接槽函数
