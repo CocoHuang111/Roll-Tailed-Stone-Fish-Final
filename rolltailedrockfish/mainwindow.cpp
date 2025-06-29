@@ -420,6 +420,63 @@ void MainWindow::setpage3(QWidget* pg){
         "color:white;"
         "font-size: 30px;"
         );
+
+        QHBoxLayout *tagsline1=new QHBoxLayout;
+    tagsline1->setContentsMargins(20,0,10,0);
+    ResizeButton *tag1=new ResizeButton("数学");
+    ResizeButton *tag2=new ResizeButton("计算机");
+    ResizeButton *tag3=new ResizeButton("中文");
+    ResizeButton *tag4=new ResizeButton("物理");
+    ResizeButton *tag5=new ResizeButton("化学");
+    ResizeButton *tag6=new ResizeButton("生物");
+    ResizeButton *tag7=new ResizeButton("政治");
+    ResizeButton *tag8=new ResizeButton("英语");
+    ResizeButton *tag9=new ResizeButton("经管");
+    QList<ResizeButton*> alltag={tag1,tag2,tag3,tag4,tag5,tag6,tag7,tag8,tag9};
+    for(auto tag :alltag){
+        tag->setStyleSheet(
+            "QPushButton{"
+            "background-color: rgba(73, 150, 255, 158);"
+            "color:white;"
+            "border:3px solid white;"
+            "border-radius:20px;"
+            " padding: 8px;"
+            "font-size:20px;"
+            "}"
+            "QPushButton:hover{"
+            "background-color: rgb(120, 170, 255);"
+            "font-size:20px;"
+            "}"
+            );
+        tagsline1->addWidget(tag);
+    }
+
+    QHBoxLayout *tagsline2=new QHBoxLayout;
+    tagsline1->setContentsMargins(20,0,10,0);
+    ResizeButton *tag2_1=new ResizeButton("教材");
+    ResizeButton *tag2_2=new ResizeButton("习题");
+    ResizeButton *tag2_3=new ResizeButton("研究");
+    ResizeButton *tag2_4=new ResizeButton("传记");
+    ResizeButton *tag2_5=new ResizeButton("文学");
+    QList<ResizeButton*> alltag2={tag2_1,tag2_2,tag2_3,tag2_4,tag2_5};
+    for(auto tag :alltag2){
+        tag->setStyleSheet(
+            "QPushButton{"
+            "background-color: rgba(73, 150, 255, 158);"
+            "color:white;"
+            "border:3px solid white;"
+            "border-radius:20px;"
+            " padding: 8px;"
+            "font-size:20px;"
+            "}"
+            "QPushButton:hover{"
+            "background-color: rgb(120, 170, 255);"
+            "font-size:20px;"
+            "}"
+            );
+        tagsline2->addWidget(tag);
+    }
+    
     QLabel *guess_title=new QLabel("猜你喜欢：");
     guess_title->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     guess_title->setStyleSheet(
@@ -429,8 +486,12 @@ void MainWindow::setpage3(QWidget* pg){
     //补充所有tag和猜你喜欢 TODO
 
     QVBoxLayout *recommend_layout=new QVBoxLayout;
-    recommend_layout->addWidget(tag_title);
-    recommend_layout->addWidget(guess_title);
+    recommend_layout->addWidget(tag_title,2);
+    recommend_layout->addLayout(tagsline1,1);
+    recommend_layout->addStretch();
+    recommend_layout->addLayout(tagsline2,1);
+    recommend_layout->addWidget(guess_title,2);
+    recommend_layout->addStretch();
 
     QWidget *recommend_page=new QWidget;
     recommend_page->setLayout(recommend_layout);
