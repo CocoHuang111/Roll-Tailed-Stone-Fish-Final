@@ -695,9 +695,9 @@ void MainWindow::setpage4(QWidget* pg){
 
     QVBoxLayout *layout4=new QVBoxLayout;
     layout4->setContentsMargins(30,35,30,35);
-    layout4->addLayout(head_layout);
+    layout4->addLayout(head_layout,1);
     layout4->addStretch();
-    layout4->addWidget(scroll);
+    layout4->addWidget(scroll,5);
 
     pg->setLayout(layout4);
 }
