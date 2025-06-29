@@ -83,6 +83,10 @@ private:
     QList<Announcement> readAllAnnouncements();
     QWidget* createAnnouncementWidget(const Announcement& announcement);
     void refreshAnnouncements(QVBoxLayout* scrollLayout);
+    //page6 chat相关
+    QWidget *chatContainer;
+    void openChatWindow(const QString &contact);
+    void updateContact();
 };
 
 #endif // MAINWINDOW_H
