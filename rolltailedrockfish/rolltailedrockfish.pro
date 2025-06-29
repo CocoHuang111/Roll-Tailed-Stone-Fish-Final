@@ -9,25 +9,27 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    Announcement.cpp \
+    announcementdialog.cpp \
+    Book.cpp \
+    Chat.cpp \
     findbookdialog.cpp \
     main.cpp \
     mainwindow.cpp \
     registerdialog.cpp \
-    Announcement.cpp \
-    Book.cpp \
     User.cpp \
-    UserManager.cpp \
-    announcementdialog.cpp
+    UserManager.cpp 
 
 HEADERS += \
+    Announcement.h \
+    announcementdialog.h \
+    Book.h \
+    Chat.h \
     findbookdialog.h \
     mainwindow.h \
     registerdialog.h \
-    Announcement.h \
-    Book.h \
     User.h \
-    UserManager.h \
-    announcementdialog.h
+    UserManager.h 
 
 FORMS += \
     mainwindow.ui
