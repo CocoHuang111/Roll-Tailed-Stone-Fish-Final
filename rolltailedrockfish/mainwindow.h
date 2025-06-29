@@ -45,6 +45,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     UserManager qy;
+    BookShelf bs;
     QStackedWidget *MainArea=new QStackedWidget;
 
 protected:
