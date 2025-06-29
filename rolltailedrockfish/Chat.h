@@ -30,7 +30,7 @@ public:
     QJsonObject toJson() const;
     static Chat fromJson(const QJsonObject& json);
     static QString getChatFileName(const QString& user1, const QString& user2);
-    Chat loadChat(const QString& user1, const QString& user2);
+    static QList<QString> getContacts(const QString& currentUser);
 };
 
 #endif // CHAT_H
