@@ -14,6 +14,7 @@ SOURCES += \
     Book.cpp \
     BookShelf.cpp \
     Chat.cpp \
+    displaydialog.cpp \
     findbookdialog.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -27,6 +28,7 @@ HEADERS += \
     Book.h \
     BookShelf.h \
     Chat.h \
+    displaydialog.h \
     findbookdialog.h \
     mainwindow.h \
     registerdialog.h \
