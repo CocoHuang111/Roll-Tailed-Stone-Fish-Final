@@ -2,6 +2,7 @@
 #define FINDBOOKDIALOG_H
 
 #include <QDialog>
+#include <QLineEdit>
 
 class FindbookDialog : public QDialog
 {
