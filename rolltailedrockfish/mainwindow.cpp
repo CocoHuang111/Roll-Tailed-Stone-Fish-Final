@@ -121,6 +121,15 @@ MainWindow::MainWindow(QWidget *parent)
                 "}"
                 );
             current_page=i;
+                        switch(i){
+            case 0:setpage1(page1);
+            case 1:setpage2(page2);
+            case 2:setpage3(page3);
+            case 3:setpage4(page4);
+            case 4:setpage5(page5);
+            case 5:setpage6(page6);
+                //case 6:setpage7(page7);
+            }
         });
     }
 
