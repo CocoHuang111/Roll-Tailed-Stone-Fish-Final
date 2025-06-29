@@ -747,7 +747,7 @@ void MainWindow::setpage5(QWidget* pg){
         if (addbook->exec() == QDialog::Accepted) {
             if(!currentUser) QMessageBox::critical(this, "错误", "未登陆！");
             else{
-                Book* book = new Book(addbook->getBook(QString::fromStdString(currentUser->username)));
+                Book* book = new Book(addbook->getBook(QString::fromStdString(currentUser->username),bs.count()));
                 if (bs.addBook(book)) {  // 假设addBook接受Book引用
                     if (bs.saveToFile()) {  // 保存到文件
                         QMessageBox::information(this, "成功", "上传成功！");
