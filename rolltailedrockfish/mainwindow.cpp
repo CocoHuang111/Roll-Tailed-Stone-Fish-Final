@@ -483,6 +483,29 @@ void MainWindow::setpage3(QWidget* pg){
         tagsline2->addWidget(tag);
     }
     
+    auto setupTagButton = [this](ResizeButton* button) {
+        connect(button, &QPushButton::clicked, [this, button]() {
+            QString tag = button->text();
+            if (selectedTags.contains(tag)) {
+                selectedTags.remove(tag);
+                button->setStyleSheet(normalStyle); // 恢复默认样式
+            } else {
+                selectedTags.insert(tag);
+                button->setStyleSheet(selectedStyle); // 设置选中样式
+            }
+        });
+    };
+
+    // 应用到所有标签按钮
+    for (auto tag : alltag) {
+        tag->setStyleSheet(normalStyle);
+        setupTagButton(tag);
+    }
+    for (auto tag : alltag2) {
+        tag->setStyleSheet(normalStyle);
+        setupTagButton(tag);
+    }
+    
     QLabel *guess_title=new QLabel("猜你喜欢：");
     guess_title->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     guess_title->setStyleSheet(
