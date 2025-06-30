@@ -30,17 +30,22 @@ FindbookDialog::FindbookDialog(QWidget *parent) : QDialog(parent) {
     QPushButton *add_tag9=new QPushButton("经管");
     QList<QPushButton*> add_alltag1={add_tag1,add_tag2,add_tag3,add_tag4,add_tag5,add_tag6,add_tag7,add_tag8,add_tag9};
     for(auto tag :add_alltag1){
+        tag->setCheckable(true);
         tag->setStyleSheet(
-            "background-color:white;"
+            "QPushButton{"
+            "background-color: white;"
+            "}"
+            "QPushButton:checked{"
+            "background-color: gray"
+            "}"
             );
     }
     for(int k=0;k<9;k++){
         add_tagsline1->addWidget(add_alltag1[k]);
-        connect(add_alltag1[k],&QPushButton::clicked,[=](){
-            newtags<<add_tag1_content[k];
-            add_alltag1[k]->setStyleSheet(
-                "background-color: gray;"
-                );
+        connect(add_alltag1[k], &QPushButton::toggled, [=](bool checked){
+            if (checked) {
+                newtags<<newtags<<add_tag1_content[k];
+            }
         });
     }
 
@@ -53,17 +58,22 @@ FindbookDialog::FindbookDialog(QWidget *parent) : QDialog(parent) {
     QPushButton *add_tag2_5=new QPushButton("文学");
     QList<QPushButton*> add_alltag2={add_tag2_1,add_tag2_2,add_tag2_3,add_tag2_4,add_tag2_5};
     for(auto tag :add_alltag2){
+        tag->setCheckable(true);
         tag->setStyleSheet(
-            "background-color:white;"
+            "QPushButton{"
+            "background-color: white;"
+            "}"
+            "QPushButton:checked{"
+            "background-color: gray"
+            "}"
             );
     }
     for(int k=0;k<5;k++){
         add_tagsline2->addWidget(add_alltag2[k]);
-        connect(add_alltag2[k],&QPushButton::clicked,[=](){
-            newtags<<add_tag2_content[k];
-            add_alltag2[k]->setStyleSheet(
-                "background-color: gray;"
-                );
+        connect(add_alltag2[k], &QPushButton::toggled, [=](bool checked){
+            if (checked) {
+                newtags<<newtags<<add_tag2_content[k];
+            }
         });
     }
 
