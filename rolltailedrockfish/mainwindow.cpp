@@ -388,6 +388,7 @@ QList<Book> MainWindow::parseSearchResults(const QByteArray &jsonData) {
 void MainWindow::displaySearchResults(const QList<Book> &books, QWidget *container) {
     // 清空容器
     QLayout *layout = container->layout();
+    layout->setSpacing(15);
     if (layout) {
         QLayoutItem *item;
         while ((item = layout->takeAt(0))) {
@@ -400,15 +401,29 @@ void MainWindow::displaySearchResults(const QList<Book> &books, QWidget *contain
 
     // 动态创建结果项
     for (const Book &book : books) {
-        QLabel *item = new QLabel(
-            QString("<b>%1</b><br>作者: %2<br>价格: %3<br>isbn: %4")
-                .arg(book.title.toHtmlEscaped())
-                .arg(book.author.toHtmlEscaped())
-                .arg(book.price)
-                .arg(book.isbn.toHtmlEscaped())
+        QPushButton *bookbtn=new QPushButton(book.title);
+        bookbtn->setFixedHeight(50);
+        bookbtn->setStyleSheet(
+            "QPushButton{"
+            "background-color: rgba(73, 150, 255, 158);"
+            "color:white;"
+            "border:3px solid white;"
+            "border-radius:20px;"
+            " padding: 8px;"
+            "}"
+            "QPushButton:hover{"
+            "background-color: rgb(120, 170, 255);"
+            "}"
             );
-        item->setStyleSheet("color: white; padding: 10px;");
-        layout->addWidget(item);
+        connect(bookbtn,&QPushButton::clicked,[=](){
+            DisplayDialog *display=new DisplayDialog(const_cast<Book*>(&book),this);
+            display->show();
+            if(display->exec()==QDialog::Accepted){
+                MainArea->setCurrentIndex(5);
+            }
+            delete display;
+        });
+        layout->addWidget(bookbtn);
     }
     container->setLayout(layout);
 }
@@ -533,11 +548,30 @@ void MainWindow::setpage3(QWidget* pg){
     QWidget *recommend_page=new QWidget;
     recommend_page->setLayout(recommend_layout);
     QWidget *search_result=new QWidget;
+    search_result->setStyleSheet("background-color: rgba(255,255,255,0);");
+    search_result->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
+    QScrollArea *search_scroll=new QScrollArea;
+    search_scroll->setStyleSheet("background-color: rgba(255,255,255,0);");
+    search_scroll->setWidget(search_result);
+    search_scroll->setWidgetResizable(true);
+    QWidget *searchpage2=new QWidget;
+    QVBoxLayout *page2layout=new QVBoxLayout;
+    searchpage2->setLayout(page2layout);
 
     QStackedWidget* search_pages=new QStackedWidget;
     search_pages->addWidget(recommend_page);
-    search_pages->addWidget(search_result);
+    search_pages->addWidget(searchpage2);
     search_pages->setCurrentIndex(0);
+
+    QPushButton *back=new QPushButton("返回");
+    back->setFixedWidth(60);
+    connect(back,&QPushButton::clicked,[=](){
+        search_pages->setCurrentIndex(0);
+    });
+
+    page2layout->addWidget(search_scroll,13);
+    page2layout->addWidget(back, 1, Qt::AlignLeft);
+
     //搜索
     connect(search_confirm,&QPushButton::clicked,[=](){
         //搜索算法 TODO
@@ -593,16 +627,10 @@ void MainWindow::setpage3(QWidget* pg){
         search_pages->setCurrentIndex(1);
     });
 
-    QPushButton *back=new QPushButton("返回");
-    back->setFixedWidth(60);  
-    connect(back,&QPushButton::clicked,[=](){
-        search_pages->setCurrentIndex(0);
-    });
     QVBoxLayout *layout3=new QVBoxLayout;
     layout3->setContentsMargins(30,35,30,35);
     layout3->addLayout(search_layout,1);
-    layout3->addWidget(search_pages,13);
-    layout3->addWidget(back, 0, Qt::AlignLeft);
+    layout3->addWidget(search_pages,14);
 
     pg->setLayout(layout3);
 }
