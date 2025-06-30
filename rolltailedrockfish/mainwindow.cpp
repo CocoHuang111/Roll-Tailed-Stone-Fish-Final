@@ -608,6 +608,8 @@ void MainWindow::setpage3(QWidget* pg){
     layout3->addLayout(search_layout,1);
     layout3->addWidget(search_pages,13);
     layout3->addWidget(back, 0, Qt::AlignLeft);
+
+    pg->setLayout(layout3);
 }
 
 
