@@ -39,15 +39,6 @@ bool BookShelf::saveToFile(const QString &path) const {
         return false;
     }
 
-    QDir().mkpath(QFileInfo(lucenePath1).path());
-    QDir().mkpath(QFileInfo(lucenePath2).path());
-
-    QFile::remove(lucenePath1);
-    QFile::copy(filePath, lucenePath1);
-
-    QFile::remove(lucenePath2);
-    QFile::copy(filePath, lucenePath2);
-
     // 准备要保存的JSON数据
     QJsonArray jsonArray;
     for (const Book* book : books) {
