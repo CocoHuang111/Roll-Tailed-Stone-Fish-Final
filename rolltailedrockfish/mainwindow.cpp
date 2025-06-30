@@ -873,6 +873,7 @@ void MainWindow::setpage5(QWidget* pg){
                     if (bs.saveToFile()) {  // 保存到文件
                         QMessageBox::information(this, "成功", "上传成功！");
                         refreshOwnerbook(book_display);
+                        updateUserInfo();
                     } else {
                         QMessageBox::critical(this, "错误", "保存文件失败！");
                     }
