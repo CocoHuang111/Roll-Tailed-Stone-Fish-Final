@@ -59,6 +59,7 @@ private:
     QPixmap background;
     QLabel* usernameLabel;
     QLabel* contactLabel;
+    QLabel* onsalebookLabel;
     void updateUserInfo();
     QNetworkAccessManager *networkManager;
     int current_page;
