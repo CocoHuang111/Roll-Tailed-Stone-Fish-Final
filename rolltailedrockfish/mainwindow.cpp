@@ -360,7 +360,7 @@ void MainWindow::setpage2(QWidget* pg){
     //layout2->addStretch();
     layout2->addWidget(contactLabel,1);
     //layout2->addStretch();
-    layout2->addWidget(book_on_sale,1);
+    layout2->addWidget(onsalebookLabel,1);
     //layout2->addStretch();
     layout2->addWidget(record,1);
     //layout2->addStretch();
