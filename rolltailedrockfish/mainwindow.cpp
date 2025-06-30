@@ -810,6 +810,16 @@ void MainWindow::setpage4(QWidget* pg){
         "font-size: 30px;"
         );
     ResizeButton *add_announcement=new ResizeButton("发布新公告");
+    add_announcement->setStyleSheet(
+        "QPushButton {"
+        "    font-size: 18px;"      // 调大字体
+        "    padding: 10px 20px;"   // 增加内边距（可选）
+        "    background-color: rgba(73, 150, 255, 158);"
+        "color:white;"
+        "border:2px solid white;"
+        "border-radius:15px;"
+        "}"
+        );
 
     QHBoxLayout *head_layout=new QHBoxLayout;
     head_layout->setContentsMargins(0,0,200,0);
