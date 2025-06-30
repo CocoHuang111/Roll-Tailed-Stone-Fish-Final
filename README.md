@@ -1,6 +1,5 @@
 # Roll-Tailed-Stone-Fish-Final
-翻尾石鱼二手书交易平台
-https://docs/images/logo.png <!-- 如果有logo的话 -->
+# 翻尾石鱼二手书交易平台
 
 一个基于Qt框架开发的校园二手书交易平台，提供书籍买卖、社区交流和用户私信等功能。
 
@@ -47,9 +46,9 @@ https://docs/images/logo.png <!-- 如果有logo的话 -->
 
   - 观察者模式（信号槽）
 
-项目结构
+# 项目结构
 
-text
+```text
 FlippingStoneFish/
 ├── docs/                    # 项目文档
 ├── include/                 # 头文件
@@ -77,6 +76,7 @@ FlippingStoneFish/
 │   └── chats/               # 聊天记录
 ├── CMakeLists.txt           # CMake构建配置
 └── README.md                # 本文件
+```
 快速开始
 
 构建要求
