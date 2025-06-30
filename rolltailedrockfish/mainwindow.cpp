@@ -532,18 +532,30 @@ void MainWindow::setpage3(QWidget* pg){
     search_pages->setCurrentIndex(0);
     //搜索
     connect(search_confirm,&QPushButton::clicked,[=](){
-        //搜索算法 TODO
         QString keyword = search_column->text().trimmed();
 
-        // 构建请求URL
-        QUrl url("http://localhost:8080/api/books/search");
-        QUrlQuery query;
-        query.addQueryItem("query", keyword);
-        url.setQuery(query);
+        QJsonObject fieldQueries;
+        if (!keyword.isEmpty()) {
+            fieldQueries["title"] = keyword;
+            fieldQueries["author"] = keyword;
+            fieldQueries["description"] = keyword;
+        }
+        if (!selectedTags.isEmpty()) {
+            QString tags = "";
+            for (const QString& tag : selectedTags) {
+                tags = tags + " " + tag;
+            }
+            fieldQueries["tags"] = tags;
+        }
 
-        // 发送GET请求
+        // 构建请求URL
+        QUrl url("http://localhost:8080/api/books/advanced-search");
+        QJsonDocument doc(fieldQueries);
+        QByteArray data = doc.toJson();
+
         QNetworkRequest request(url);
-        QNetworkReply *reply = networkManager->get(request);
+        request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+        QNetworkReply *reply = networkManager->post(request, data);
 
         connect(reply, &QNetworkReply::finished, [=](){
             if (reply->error() == QNetworkReply::NoError) {
