@@ -34,4 +34,7 @@ DisplayDialog::DisplayDialog(Book *book, QWidget *parent)  : QDialog(parent) ,bo
 
     setLayout(mainLayout);
     setFixedSize(300, 200);
+
+    connect(contact_seller, &QPushButton::clicked, this, &QDialog::accept);
+    connect(exit, &QPushButton::clicked, this, &QDialog::reject);
 }
