@@ -1248,14 +1248,14 @@ void MainWindow::setpage6(QWidget* pg){
             QLabel *loginHint = new QLabel("请先登录以查看联系人！");
             loginHint->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
             loginHint->setStyleSheet("color: white; font-size: 30px;");
-            contact_layout->addWidget(loginHint);
+            page1_layout->addWidget(loginHint);
         }
         else{
             QString username = QString::fromStdString(currentUser->username);
             QList<QString> contacts = Chat::getContacts(username);
             if (contacts.isEmpty()) {
                 QLabel *hint = new QLabel("暂无联系人");
-                contact_layout->addWidget(hint);
+                page1_layout->addWidget(hint);
             }
             else{
                 for (const QString &contact : contacts) {
@@ -1277,7 +1277,7 @@ void MainWindow::setpage6(QWidget* pg){
                         openChatWindow(contact);
                     });
 
-                    contact_layout->addWidget(contactBtn);
+                    page1_layout->addWidget(contactBtn);
                 }
             }
 
