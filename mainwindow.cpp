@@ -500,7 +500,7 @@ void MainWindow::setpage3(QWidget* pg){
     search_column->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     QString search_content=search_column->text();
     ResizeButton *search_confirm=new ResizeButton("确定");
-        search_confirm->setStyleSheet(
+    search_confirm->setStyleSheet(
         "QPushButton {"
         "    font-size: 15px;"      // 调大字体
         "    padding: 8px 12px;"   // 增加内边距（可选）
@@ -834,7 +834,7 @@ void MainWindow::setpage4(QWidget* pg){
         "font-size: 30px;"
         );
     ResizeButton *add_announcement=new ResizeButton("发布新公告");
-        add_announcement->setStyleSheet(
+    add_announcement->setStyleSheet(
         "QPushButton {"
         "    font-size: 18px;"      // 调大字体
         "    padding: 10px 20px;"   // 增加内边距（可选）
@@ -964,8 +964,22 @@ void MainWindow::setpage5(QWidget* pg){
     refreshOwnerbook(book_display);
 
     ResizeButton *add_book=new ResizeButton("添加新书");
+    add_book->setStyleSheet(
+        "QPushButton {"
+        "    font-size: 18px;"      // 调大字体
+        "    padding: 10px 20px;"   // 增加内边距（可选）
+        "    background-color: rgba(73, 150, 255, 158);"
+        "color:white;"
+        "border:2px solid white;"
+        "border-radius:15px;"
+        "}"
+        );
     //添加新书的后续操作 TODO
     connect(add_book,&QPushButton::clicked,[=](){
+        if(!currentUser) {
+            QMessageBox::critical(this, "错误", "未登陆！");
+            return;
+        }
         FindbookDialog *addbook=new FindbookDialog(this);
         if (addbook->exec() == QDialog::Accepted) {
             if(!currentUser) QMessageBox::critical(this, "错误", "未登陆！");
@@ -989,6 +1003,7 @@ void MainWindow::setpage5(QWidget* pg){
     });
 
     QHBoxLayout *headline=new QHBoxLayout;
+    headline->setContentsMargins(40,0,40,0);
     headline->addWidget(sellbook_title);
     headline->addStretch();
     headline->setSpacing(80);
@@ -1003,190 +1018,6 @@ void MainWindow::setpage5(QWidget* pg){
     pg->setLayout(layout5);
 }
 
-
-/*
-void MainWindow::openChatWindow(const QString &contact) {
-    // 清除旧聊天界面
-    QLayoutItem *child;
-    while ((child = chatContainer->layout()->takeAt(0)) != nullptr) {
-        delete child->widget();
-        delete child;
-    }
-
-    // 创建新聊天界面
-    QVBoxLayout *chatLayout = new QVBoxLayout(chatContainer);
-
-    // 返回按钮
-    QPushButton *backBtn = new QPushButton("← 返回联系人列表");
-    backBtn->setStyleSheet("color: white; background: transparent; border: none;");
-    connect(backBtn, &QPushButton::clicked, [this]() {
-        chatContainer->setVisible(false);
-    });
-    chatLayout->addWidget(backBtn);
-
-    // 聊天记录显示区域
-    QTextBrowser *chatDisplay = new QTextBrowser;
-    chatDisplay->setStyleSheet(
-        "background: rgba(255,255,255,0.1);"
-        "color: white;"
-        "border: 1px solid #555;"
-        "border-radius: 5px;"
-        );
-
-    // 加载聊天记录
-    Chat chat(currentUser->username.c_str(), contact);
-    for (const ChatMessage &msg : chat.messages) {
-        QString msgHtml = QString("<div style='margin: 5px;'>"
-                                  "<b style='color: %1'>%2 (%3):</b>"
-                                  "<p>%4</p>"
-                                  "</div>")
-                              .arg(msg.sender == currentUser->username.c_str() ? "#88ff88" : "#ff8888")
-                              .arg(msg.sender)
-                              .arg(msg.timestamp.toString("hh:mm"))
-                              .arg(msg.content.toHtmlEscaped());
-        chatDisplay->append(msgHtml);
-    }
-    chatLayout->addWidget(chatDisplay);
-
-    // 消息输入区域
-    QHBoxLayout *inputLayout = new QHBoxLayout;
-    QLineEdit *messageInput = new QLineEdit;
-    messageInput->setStyleSheet(
-        "background: rgba(255,255,255,0.2);"
-        "color: white;"
-        "border: 1px solid #555;"
-        "border-radius: 5px;"
-        "padding: 5px;"
-        );
-
-    QPushButton *sendBtn = new QPushButton("发送");
-    sendBtn->setStyleSheet(
-        "background: #4CAF50;"
-        "color: white;"
-        "border: none;"
-        "border-radius: 5px;"
-        "padding: 5px 15px;"
-        );
-
-    inputLayout->addWidget(messageInput, 1);
-    inputLayout->addWidget(sendBtn);
-    chatLayout->addLayout(inputLayout);
-
-    // 发送消息功能
-    connect(sendBtn, &QPushButton::clicked, [this, contact, chatDisplay, messageInput]() {
-        QString content = messageInput->text();
-        if (!content.isEmpty()) {
-            // 保存消息
-            Chat chat(currentUser->username.c_str(), contact);
-            chat.addMessage(currentUser->username.c_str(), content);
-
-            // 更新显示
-            QString msgHtml = QString("<div style='margin: 5px;'>"
-                                      "<b style='color: #88ff88'>%1 (%2):</b>"
-                                      "<p>%3</p>"
-                                      "</div>")
-                                  .arg(currentUser->username.c_str())
-                                  .arg(QDateTime::currentDateTime().toString("hh:mm"))
-                                  .arg(content.toHtmlEscaped());
-            chatDisplay->append(msgHtml);
-
-            messageInput->clear();
-        }
-    });
-
-    // 显示聊天界面
-    chatContainer->setVisible(true);
-}*/
-
-/*
-void MainWindow::setpage6(QWidget* pg){
-
-    if (pg->layout()) {
-        QLayoutItem *item;
-        while ((item = pg->layout()->takeAt(0)) != nullptr) {
-            delete item->widget();
-            delete item;
-        }
-        delete pg->layout();
-    }
-
-    QVBoxLayout *mainLayout = new QVBoxLayout(pg);
-
-    if (currentUser == nullptr) {
-        QLabel *loginHint = new QLabel("请先登录以查看联系人！");
-        loginHint->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        loginHint->setStyleSheet("color: white; font-size: 30px;");
-        mainLayout->addWidget(loginHint);
-    }
-
-    else {
-        QLabel *title = new QLabel("我的联系人");
-        title->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        title->setStyleSheet(
-            "color:white;"
-            "font-size: 30px;"
-            );
-        mainLayout->addWidget(title);
-
-        QWidget *contactsWidget = new QWidget;
-        QVBoxLayout *contactsLayout = new QVBoxLayout(contactsWidget);
-
-        QString username = QString::fromStdString(currentUser->username);
-        QList<QString> contacts = Chat::getContacts(username);
-
-        if (contacts.isEmpty()) {
-            QLabel *hint = new QLabel("暂无联系人");
-            hint->setStyleSheet("color: #aaa; font-size: 14px;");
-            contactsLayout->addWidget(hint);
-        }
-
-        else {
-            chatContainer = new QWidget(pg);
-            chatContainer->setVisible(false);
-            mainLayout->addWidget(chatContainer);
-
-            for (const QString &contact : contacts) {
-                QPushButton *contactBtn = new QPushButton(contact);
-                contactBtn->setStyleSheet(
-                    "QPushButton {"
-                    "  background-color: rgba(255,255,255,0.1);"
-                    "  color: white;"
-                    "  border: 1px solid #555;"
-                    "  padding: 10px;"
-                    "  text-align: left;"
-                    "}"
-                    "QPushButton:hover {"
-                    "  background-color: rgba(255,255,255,0.2);"
-                    "}"
-                    );
-
-                connect(contactBtn, &QPushButton::clicked, [this, contact]() {
-                    openChatWindow(contact);
-                });
-
-                contactsLayout->addWidget(contactBtn);
-            }
-            // 聊天容器初始化
-            if (!chatContainer) {
-                chatContainer = new QWidget(pg);
-                chatContainer->setLayout(new QVBoxLayout());
-                chatContainer->setVisible(false);
-            }
-            mainLayout->addWidget(chatContainer);
-
-            pg->setLayout(mainLayout);
-
-        }
-
-        QScrollArea *contactsScroll = new QScrollArea;
-        contactsScroll->setWidgetResizable(true);
-        contactsScroll->setWidget(contactsWidget);
-        contactsScroll->setStyleSheet("background: transparent; border: none;");
-
-        mainLayout->addWidget(contactsScroll);
-    }
-}
-*/
 
 void MainWindow::openChatWindow(const QString &contact) {
     // 清除旧聊天界面
