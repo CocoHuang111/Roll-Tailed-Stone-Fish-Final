@@ -663,6 +663,8 @@ void MainWindow::setpage3(QWidget* pg){
             fieldQueries["tags"] = tags;
         }
 
+        bs.uploadBooksJson();
+
         QUrl url("http://localhost:8080/api/books/advanced-search");
         QJsonDocument doc(fieldQueries);
         QByteArray data = doc.toJson();
