@@ -178,7 +178,10 @@ MainWindow --> Book
 MainWindow --> User
 @enduml
 ```
-
+# 演示视频
+https://disk.pku.edu.cn/link/AR6F18C34084134B1B81A91AC1CD0EA63F
+文件名：44-演示.mp4
+文件路径：AnyShare://康恩铭_2400012948/44-演示.mp4
 
 ## 最后更新：2025年6月30日
 
