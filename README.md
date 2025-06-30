@@ -99,6 +99,8 @@ FlippingStoneFish/
 
 3.配置Qt Kit（建议使用Desktop Qt 5.15.x）
 
+4.在qt项目中搜索需要在本机开启Lucene Search API文档中的服务器SearchApplication
+
 
 # 使用指南
 
