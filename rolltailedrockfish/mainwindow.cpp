@@ -496,6 +496,16 @@ void MainWindow::setpage3(QWidget* pg){
     search_column->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     QString search_content=search_column->text();
     ResizeButton *search_confirm=new ResizeButton("确定");
+    search_confirm->setStyleSheet(
+        "QPushButton {"
+        "    font-size: 15px;"      // 调大字体
+        "    padding: 8px 12px;"   // 增加内边距（可选）
+        "    background-color: rgba(73, 150, 255, 158);"
+        "color:white;"
+        "border:2px solid white;"
+        "border-radius:15px;"
+        "}"
+        );
     search_confirm->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     QHBoxLayout *search_layout=new QHBoxLayout;
