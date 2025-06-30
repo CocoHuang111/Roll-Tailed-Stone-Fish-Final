@@ -1144,11 +1144,13 @@ void MainWindow::setpage6(QWidget* pg){
                 QPushButton *contactBtn = new QPushButton(contact);
                 contactBtn->setStyleSheet(
                     "QPushButton {"
-                    "  background-color: rgba(255,255,255,0.1);"
                     "  color: white;"
-                    "  border: 1px solid #555;"
-                    "  padding: 10px;"
-                    "  text-align: left;"
+                    "  background-color: rgba(73, 150, 255, 158);"
+                    "  border: 2px solid white;"
+                    "  border-radius: 15px;"
+                    "  padding: 10px 20px;"
+                    "  font-size: 20px;"
+                    "  text-align: middle;"
                     "}"
                     "QPushButton:hover {"
                     "  background-color: rgba(255,255,255,0.2);"
