@@ -718,7 +718,7 @@ void MainWindow::refreshOwnerbook(QVBoxLayout* scrollLayout){
     if(!bs.books.isEmpty()){
         for(auto book:bs.books){
             if((book!=nullptr) && (currentUser!=nullptr)){
-                if((book->sellerId==QString::fromStdString(currentUser->username))&&(book->isSold)){
+                if((book->sellerId==QString::fromStdString(currentUser->username))&&!(book->isSold)){
                     QPushButton *bookbtn=new QPushButton(book->title);
                     bookbtn->setFixedHeight(50);
                     bookbtn->setStyleSheet(
