@@ -2,8 +2,6 @@
 #include <QJsonArray>
 #include <algorithm>
 #include <QMessageBox>
-#include <QDebug>
-#include <QDir>
 
 BookShelf::BookShelf()
 {
