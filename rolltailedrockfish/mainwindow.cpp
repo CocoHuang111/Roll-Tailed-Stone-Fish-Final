@@ -450,7 +450,7 @@ QList<Book> MainWindow::parseSearchResults(const QByteArray &jsonData) {
 void MainWindow::displaySearchResults(const QList<Book> &books, QWidget *container) {
     // 清空容器
     QLayout *layout = container->layout();
-    //layout->setSpacing(15);
+    layout->setSpacing(20);
     if (layout) {
         QLayoutItem *item;
         while ((item = layout->takeAt(0))) {
@@ -487,6 +487,7 @@ void MainWindow::displaySearchResults(const QList<Book> &books, QWidget *contain
         });
         layout->addWidget(bookbtn);
     }
+    layout->addStretch();
     container->setLayout(layout);
 }
 
@@ -923,6 +924,7 @@ void MainWindow::refreshOwnerbook(QVBoxLayout* scrollLayout){
             }
         }
     }
+    scrollLayout->addStretch();
 }
 
 void MainWindow::setpage5(QWidget* pg){
