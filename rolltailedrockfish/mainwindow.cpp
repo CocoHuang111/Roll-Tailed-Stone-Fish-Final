@@ -389,7 +389,7 @@ QList<Book> MainWindow::parseSearchResults(const QByteArray &jsonData) {
 void MainWindow::displaySearchResults(const QList<Book> &books, QWidget *container) {
     // 清空容器
     QLayout *layout = container->layout();
-    layout->setSpacing(15);
+    // layout->setSpacing(15);
     if (layout) {
         QLayoutItem *item;
         while ((item = layout->takeAt(0))) {
