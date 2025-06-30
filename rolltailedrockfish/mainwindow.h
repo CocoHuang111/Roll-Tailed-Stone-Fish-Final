@@ -49,6 +49,7 @@ public:
     UserManager qy;
     BookShelf bs;
     QStackedWidget *MainArea=new QStackedWidget;
+    QVBoxLayout *book_diaplay=nullptr;
 
 protected:
     void paintEvent(QPaintEvent *event) override;
@@ -85,6 +86,8 @@ private:
     QList<Announcement> readAllAnnouncements();
     QWidget* createAnnouncementWidget(const Announcement& announcement);
     void refreshAnnouncements(QVBoxLayout* scrollLayout);
+    //page5 在售书目
+    void refreshOwnerbook(QVBoxLayout* scrollLayout);
     //page6 chat相关
     QWidget *chatContainer;
     void openChatWindow(const QString &contact);
