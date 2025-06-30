@@ -22,7 +22,7 @@ public:
     bool addBook(const Book* book);
     bool removeBook(const QString& isbn);
     bool updateBook(const Book* book);
-    //Book findBook(const QString& isbn) const;
+    Book findBook(const QString& isbn) const;
 
     // 批量操作
     //QList<Book> findByAuthor(const QString& author) const;
