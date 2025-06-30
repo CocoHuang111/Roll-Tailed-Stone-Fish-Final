@@ -7,9 +7,13 @@
 DisplayDialog::DisplayDialog(Book *book, QWidget *parent)  : QDialog(parent) ,book(book) {
     setWindowTitle("书本信息");
     display_title=new QLabel("书名："+book->title);
+    display_title->setWordWrap(true);
     display_author=new QLabel("作者："+book->author);
+    display_author->setWordWrap(true);
     display_publisher=new QLabel("出版商："+book->publisher);
+    display_publisher->setWordWrap(true);
     display_description=new QLabel("内容简介："+book->description);
+    display_description->setWordWrap(true);
     display_price=new QLabel("售价："+QString::number(book->price));
     display_seller=new QLabel("卖家："+book->sellerId);
     contact_seller=new QPushButton("联系卖家");
@@ -33,7 +37,7 @@ DisplayDialog::DisplayDialog(Book *book, QWidget *parent)  : QDialog(parent) ,bo
     mainLayout->addLayout(lastline);
 
     setLayout(mainLayout);
-    setFixedSize(300, 200);
+    setMaximumWidth(400);
 
     connect(contact_seller, &QPushButton::clicked, this, &QDialog::accept);
     connect(exit, &QPushButton::clicked, this, &QDialog::reject);
