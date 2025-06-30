@@ -49,7 +49,7 @@ public:
     UserManager qy;
     BookShelf bs;
     QStackedWidget *MainArea=new QStackedWidget;
-    QVBoxLayout *book_diaplay=nullptr;
+    QVBoxLayout *book_display=nullptr;
 
 protected:
     void paintEvent(QPaintEvent *event) override;
