@@ -3,10 +3,51 @@
 #include <algorithm>
 #include <QMessageBox>
 #include <QDebug>
+#include <QNetworkAccessManager>
+#include <QHttpMultiPart>
+#include <QFile>
+#include <QNetworkReply>
+
 
 BookShelf::BookShelf()
 {
     loadFromFile();
+}
+
+void BookShelf::uploadBooksJson() const {
+    QString filePath = "books.json"; // 默认在 build 目录下
+    QFile file(filePath);
+    if (!file.open(QIODevice::ReadOnly)) {
+        qDebug() << "Failed to open file:" << filePath;
+        return;
+    }
+
+    QNetworkAccessManager *manager = new QNetworkAccessManager(nullptr);
+
+    QUrl url("http://localhost:8080/upload-books");
+    QNetworkRequest request(url);
+
+    QHttpMultiPart *multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
+
+    QHttpPart filePart;
+    filePart.setHeader(QNetworkRequest::ContentDispositionHeader,
+                       QVariant("form-data; name=\"file\"; filename=\"books.json\""));
+    filePart.setBody(file.readAll());
+
+    multiPart->append(filePart);
+
+    QNetworkReply *reply = manager->post(request, multiPart);
+    multiPart->setParent(reply); // 内存管理
+
+    // 处理响应
+    QObject::connect(reply, &QNetworkReply::finished, [=]() {
+        if (reply->error() == QNetworkReply::NoError) {
+            qDebug() << "Upload successful:" << reply->readAll();
+        } else {
+            qDebug() << "Upload failed:" << reply->errorString();
+        }
+        reply->deleteLater();
+    });
 }
 
 bool BookShelf::loadFromFile(const QString &path) {
