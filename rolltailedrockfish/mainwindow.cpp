@@ -937,6 +937,16 @@ void MainWindow::setpage5(QWidget* pg){
     refreshOwnerbook(book_display);
 
     ResizeButton *add_book=new ResizeButton("添加新书");
+    add_book->setStyleSheet(
+        "QPushButton {"
+        "    font-size: 18px;"      // 调大字体
+        "    padding: 10px 20px;"   // 增加内边距（可选）
+        "    background-color: rgba(73, 150, 255, 158);"
+        "color:white;"
+        "border:2px solid white;"
+        "border-radius:15px;"
+        "}"
+        );
     //添加新书的后续操作 TODO
     connect(add_book,&QPushButton::clicked,[=](){
         FindbookDialog *addbook=new FindbookDialog(this);
