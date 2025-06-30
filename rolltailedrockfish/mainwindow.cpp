@@ -331,7 +331,7 @@ void MainWindow::setpage2(QWidget* pg){
         " padding: 8px;"
         "font-size: 20px;"
     );
-
+/*
     QLabel *record=new QLabel("交易记录：");
     record->setStyleSheet(
         "background-color: rgba(120, 170, 255);"
@@ -341,7 +341,7 @@ void MainWindow::setpage2(QWidget* pg){
         " padding: 8px;"
         "font-size: 20px;"
     );
-
+*/
     QLabel *award=new QLabel("解锁成就：");
     award->setStyleSheet(
         "background-color: rgba(120, 170, 255);"
@@ -355,7 +355,7 @@ void MainWindow::setpage2(QWidget* pg){
     QVBoxLayout *layout2=new QVBoxLayout;
     layout2->setContentsMargins(40,0,40,35);
     layout2->setSpacing(20);
-    layout2->addWidget(title,2);
+    layout2->addWidget(title,1);
     //layout2->addStretch();
     layout2->addWidget(usernameLabel,1);
     //layout2->addStretch();
@@ -363,7 +363,7 @@ void MainWindow::setpage2(QWidget* pg){
     //layout2->addStretch();
     layout2->addWidget(onsalebookLabel,1);
     //layout2->addStretch();
-    layout2->addWidget(record,1);
+    //layout2->addWidget(record,1);
     //layout2->addStretch();
     layout2->addWidget(award,1);
     layout2->addStretch();
