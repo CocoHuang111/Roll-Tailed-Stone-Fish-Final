@@ -80,7 +80,7 @@ private:
     ResizeButton *btn7;
 
     // page3 search相关
-    QList<Book> parseSearchResults(const QByteArray &jsonData);
+    QList<Book *> parseSearchResults(const QByteArray &jsonData);
     void displaySearchResults(const QList<Book> &books, QWidget *container);
     QSet<QString> selectedTags;
     // 定义样式
