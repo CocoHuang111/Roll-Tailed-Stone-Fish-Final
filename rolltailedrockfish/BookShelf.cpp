@@ -116,7 +116,7 @@ bool BookShelf::updateBook(const Book* book) {
     return false;
 }
 
-Book* BookShelf::findBook(const QString& isbn, QList<Book*> books){
+Book BookShelf::findBook(const QString& isbn, QList<Book*> books){
     Book* ans = nullptr;
     for(Book* book : books){
         if(book->isbn == isbn){
