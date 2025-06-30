@@ -1234,6 +1234,7 @@ void MainWindow::setpage6(QWidget* pg){
             "font-size: 30px;"
             );
         QScrollArea *contact_scroll=new QScrollArea;
+        contact_scroll->setWidgetResizable(true);
         contact_scroll->setStyleSheet("background-color:rgba(255,255,255,0);");
         QWidget *contact_widget=new QWidget;
         contact_widget->setStyleSheet("background-color:rgba(255,255,255,0);");
@@ -1248,7 +1249,7 @@ void MainWindow::setpage6(QWidget* pg){
             QLabel *loginHint = new QLabel("请先登录以查看联系人！");
             loginHint->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
             loginHint->setStyleSheet("color: white; font-size: 30px;");
-            page1_layout->addWidget(loginHint);
+            contact_layout->addWidget(loginHint);
         }
         else{
             QString username = QString::fromStdString(currentUser->username);
