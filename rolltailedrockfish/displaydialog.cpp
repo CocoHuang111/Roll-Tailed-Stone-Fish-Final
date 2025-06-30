@@ -33,5 +33,5 @@ DisplayDialog::DisplayDialog(Book *book, QWidget *parent)  : QDialog(parent) ,bo
     mainLayout->addLayout(lastline);
 
     setLayout(mainLayout);
-    setFixedSize(400, 300);
+    setFixedSize(300, 200);
 }
