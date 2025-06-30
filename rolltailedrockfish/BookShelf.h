@@ -12,8 +12,6 @@
 class BookShelf {
 private:
     QString m_storagePath = "books.json"; // 本地存储路径
-    QString lucenePath1 = "../Lucene Search API/data/books.json";
-    QString lucenePath2 = "../Lucene Search API/src/resources/data/books.json";
     bool validateBook(const Book* book) const;
     bool isbnExists(const QString& isbn) const;
 
