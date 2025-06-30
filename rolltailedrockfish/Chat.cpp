@@ -115,3 +115,41 @@ QList<QString> Chat::getContacts(const QString& currentUser) {
 
     return contacts;
 }
+
+bool Chat::createNewContact(const QString& currentUser, const QString& newContact, const QString& initialMessage) {
+    // 检查是否已经是联系人
+    QList<QString> existingContacts = getContacts(currentUser);
+    if (existingContacts.contains(newContact)) {
+        qDebug() << "已经是联系人";
+        return false;
+    }
+
+    // 确保目录存在
+    QDir().mkdir("chats");
+
+    // 创建空的聊天记录
+    Chat chat(currentUser, newContact);
+
+    QString filename = "chats/" + getChatFileName(currentUser, newContact);
+    QFile file(filename);
+
+    // 如果文件已存在，不需要重复创建
+    if (file.exists()) {
+        return false;
+    }
+
+    Chat chat1(currentUser, newContact);
+    chat1.addMessage(currentUser, initialMessage);  // 添加默认消息
+
+    // 保存空聊天记录
+    if (file.open(QIODevice::WriteOnly)) {
+        QJsonDocument doc(chat1.toJson());
+        file.write(doc.toJson());
+        file.close();
+        return true;
+    } else {
+        qDebug() << "无法创建联系人文件:" << file.errorString();
+        return false;
+    }
+}
+
