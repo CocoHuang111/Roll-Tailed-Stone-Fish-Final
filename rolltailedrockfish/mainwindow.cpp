@@ -370,7 +370,6 @@ void MainWindow::setpage2(QWidget* pg){
     pg->setLayout(layout2);
 }
 
-// TODO 返回isbn定位到书本身
 QList<Book> MainWindow::parseSearchResults(const QByteArray &jsonData) {
     QList<Book> books;
     QJsonDocument doc = QJsonDocument::fromJson(jsonData);
@@ -382,6 +381,7 @@ QList<Book> MainWindow::parseSearchResults(const QByteArray &jsonData) {
             book.title = obj["title"].toString();
             book.author = obj["author"].toString();
             book.price = obj["price"].toString().toDouble();
+            book.isbn = obj["isbn"].toString();
             // ...其他字段赋值
             books.append(book);
         }
@@ -406,10 +406,11 @@ void MainWindow::displaySearchResults(const QList<Book> &books, QWidget *contain
     // 动态创建结果项
     for (const Book &book : books) {
         QLabel *item = new QLabel(
-            QString("<b>%1</b><br>作者: %2<br>价格: %3")
+            QString("<b>%1</b><br>作者: %2<br>价格: %3<br>isbn: %4")
                 .arg(book.title.toHtmlEscaped())
                 .arg(book.author.toHtmlEscaped())
                 .arg(book.price)
+                .arg(book.isbn.toHtmlEscaped())
             );
         item->setStyleSheet("color: white; padding: 10px;");
         layout->addWidget(item);
@@ -438,7 +439,7 @@ void MainWindow::setpage3(QWidget* pg){
         "font-size: 30px;"
         );
 
-        QHBoxLayout *tagsline1=new QHBoxLayout;
+    QHBoxLayout *tagsline1=new QHBoxLayout;
     tagsline1->setContentsMargins(20,0,10,0);
     ResizeButton *tag1=new ResizeButton("数学");
     ResizeButton *tag2=new ResizeButton("计算机");
@@ -493,7 +494,7 @@ void MainWindow::setpage3(QWidget* pg){
             );
         tagsline2->addWidget(tag);
     }
-    
+
     auto setupTagButton = [this](ResizeButton* button) {
         connect(button, &QPushButton::clicked, [this, button]() {
             QString tag = button->text();
@@ -516,7 +517,8 @@ void MainWindow::setpage3(QWidget* pg){
         tag->setStyleSheet(normalStyle);
         setupTagButton(tag);
     }
-    
+
+
     QLabel *guess_title=new QLabel("猜你喜欢：");
     guess_title->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     guess_title->setStyleSheet(
@@ -543,6 +545,7 @@ void MainWindow::setpage3(QWidget* pg){
     search_pages->setCurrentIndex(0);
     //搜索
     connect(search_confirm,&QPushButton::clicked,[=](){
+        //搜索算法 TODO
         QString keyword = search_column->text().trimmed();
 
         QJsonObject fieldQueries;
@@ -559,7 +562,6 @@ void MainWindow::setpage3(QWidget* pg){
             fieldQueries["tags"] = tags;
         }
 
-        // 构建请求URL
         QUrl url("http://localhost:8080/api/books/advanced-search");
         QJsonDocument doc(fieldQueries);
         QByteArray data = doc.toJson();
@@ -572,7 +574,21 @@ void MainWindow::setpage3(QWidget* pg){
             if (reply->error() == QNetworkReply::NoError) {
                 QByteArray response = reply->readAll();
                 QList<Book> books = parseSearchResults(response);
-                displaySearchResults(books, search_result);
+
+                // 去重
+                QList<Book> deduplicatedBooks;
+                QSet<QString> seenKeys; // 用于记录已存在的键
+
+                for (const Book &book : books) {
+                    QString key = book.isbn; // 自定义唯一键
+                    if (!seenKeys.contains(key)) {
+                        deduplicatedBooks.append(book);
+                        seenKeys.insert(key);
+                    }
+                }
+
+                displaySearchResults(deduplicatedBooks, search_result);
+
             } else {
                 qWarning() << "Search failed:" << reply->errorString();
             }
@@ -589,6 +605,7 @@ void MainWindow::setpage3(QWidget* pg){
 
     pg->setLayout(layout3);
 }
+
 
 
 void MainWindow::saveAnnouncementsToFile(const QList<Announcement> &announcements) {
