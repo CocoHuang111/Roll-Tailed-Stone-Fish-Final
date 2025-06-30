@@ -57,12 +57,14 @@ MainWindow::MainWindow(QWidget *parent)
             "color:white;"
             "border:3px solid white;"
             "border-radius:20px;"
-            " padding: 8px;"
+            "font-size: 18px;"
+            "padding: 10px 20px;"
             "}"
             "QPushButton:hover{"
             "background-color: rgb(120, 170, 255);"
             "}"
             );
+        btn->setMinimumSize(120, 40);
         btn->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         leftLayout->addWidget(btn,1);
     }
@@ -159,27 +161,85 @@ void MainWindow::setpage1(QWidget* pg){
     l_logo->setScaledContents(true);
     l_logo->setAlignment(Qt::AlignCenter);
 
+    // 用户名输入部分
+    QWidget *nameWidget = new QWidget;
+    QHBoxLayout *nameLayout = new QHBoxLayout(nameWidget);
+    nameLayout->setContentsMargins(0, 0, 0, 0); // 移除内部边距
+
+    QLabel *nameLabel = new QLabel("用户名:");
+    QPalette namePalette;
+    namePalette.setColor(QPalette::WindowText, Qt::black);  // 设置黑色
+    nameLabel->setPalette(namePalette);
+    nameLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+    nameLabel->setStyleSheet("font-size: 20px;"); // 可选：调整字体大小
+
     QLineEdit *nameInput = new QLineEdit;
-    nameInput->setPlaceholderText("请输入姓名: ");
-    nameInput->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    QString name = nameInput->text();
-    //输入姓名 TODO
+    nameInput->setPlaceholderText("请输入用户名");
+    nameInput->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+
+    nameLayout->addWidget(nameLabel, 0, Qt::AlignLeft);
+    nameLayout->addWidget(nameInput, 1); // 输入框占据剩余空间
+
+    // 密码输入部分
+    QWidget *pwdWidget = new QWidget;
+    QHBoxLayout *pwdLayout = new QHBoxLayout(pwdWidget);
+    pwdLayout->setContentsMargins(0, 0, 0, 0);
+
+    QLabel *pwdLabel = new QLabel("密码:");
+    QPalette pwdPalette;
+    pwdPalette.setColor(QPalette::WindowText, Qt::black);   // 设置黑色
+    pwdLabel->setPalette(pwdPalette);
+    pwdLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+    pwdLabel->setStyleSheet("font-size: 20px;"); // 与用户名标签保持一致
+
     QLineEdit *pwdInput = new QLineEdit;
     pwdInput->setEchoMode(QLineEdit::Password);
-    pwdInput->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    pwdInput->setPlaceholderText("请输入密码: ");
-    //输入密码 TODO
-    QString password = pwdInput->text();
+    pwdInput->setPlaceholderText("请输入密码");
+    pwdInput->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+
+    pwdLayout->addWidget(pwdLabel, 0, Qt::AlignLeft);
+    pwdLayout->addWidget(pwdInput, 1);
 
     QHBoxLayout *loginbtns=new QHBoxLayout;
     loginbtns->setContentsMargins(150, 0,150, 0);
     loginbtns->setSpacing(100);
     ResizeButton *startnew=new ResizeButton("注册");
     startnew->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    startnew->setStyleSheet(
+        "QPushButton {"
+        "    font-size: 18px;"      // 调大字体
+        "    padding: 10px 20px;"   // 增加内边距（可选）
+        "    background-color: rgba(73, 150, 255, 158);"
+        "color:black;"
+        "border:2px solid black;"
+        "border-radius:15px;"
+        "}"
+        );
     ResizeButton *login=new ResizeButton("确认登录");
     login->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    login->setStyleSheet(
+        "QPushButton {"
+        "    font-size: 18px;"      // 调大字体
+        "    padding: 10px 20px;"   // 增加内边距（可选）
+        "    background-color: rgba(73, 150, 255, 158);"
+        "color:black;"
+        "border:2px solid black;"
+        "border-radius:15px;"
+        "}"
+        );
     loginbtns->addWidget(startnew,1);
     loginbtns->addWidget(login,1);
+
+    
+    nameLayout->setAlignment(Qt::AlignVCenter);
+    pwdLayout->setAlignment(Qt::AlignVCenter);
+
+    int labelWidth = QFontMetrics(nameLabel->font()).horizontalAdvance("用户名：") + 10;
+    nameLabel->setFixedWidth(labelWidth);
+    pwdLabel->setFixedWidth(labelWidth);
+
+    nameInput->setStyleSheet("QLineEdit { padding: 8px; border-radius: 4px; }");
+    pwdInput->setStyleSheet("QLineEdit { padding: 8px; border-radius: 4px; }");
     
     connect(startnew,&QPushButton::clicked,[=](){
         RegisterDialog *reg_diag = new RegisterDialog(this);
@@ -252,9 +312,9 @@ void MainWindow::setpage1(QWidget* pg){
 
     QVBoxLayout *fill_in=new QVBoxLayout;
     fill_in->setContentsMargins(200, 0, 200, 60);
-    fill_in->addWidget(nameInput);
+    fill_in->addWidget(nameWidget);
     fill_in->addStretch();
-    fill_in->addWidget(pwdInput);
+    fill_in->addWidget(pwdWidget);
     fill_in->addStretch();
     fill_in->addLayout(loginbtns);
 
@@ -304,18 +364,18 @@ void MainWindow::setpage2(QWidget* pg){
 
     usernameLabel = new QLabel("用户名：", pg); // 初始化
     usernameLabel->setStyleSheet(
-        "background-color: rgba(120, 170, 255);"
         "color:white;"
+        "background-color: rgba(60, 90, 150, 160);"
         "border:3px solid white;"
         "border-radius:20px;"
-        " padding: 8px;"
+        "padding: 8px;"
         "font-size: 20px;"
     );
 
     contactLabel = new QLabel("联系方式：",pg);
     contactLabel->setStyleSheet(
-        "background-color: rgba(120, 170, 255);"
         "color:white;"
+        "background-color: rgba(60, 90, 150, 160);"
         "border:3px solid white;"
         "border-radius:20px;"
         " padding: 8px;"
@@ -324,8 +384,8 @@ void MainWindow::setpage2(QWidget* pg){
 
     onsalebookLabel = new QLabel("在售书籍",pg);
     onsalebookLabel->setStyleSheet(
-        "background-color: rgba(120, 170, 255);"
         "color:white;"
+        "background-color: rgba(60, 90, 150, 160);"
         "border:3px solid white;"
         "border-radius:20px;"
         " padding: 8px;"
@@ -344,8 +404,8 @@ void MainWindow::setpage2(QWidget* pg){
 */
     QLabel *award=new QLabel("解锁成就：");
     award->setStyleSheet(
-        "background-color: rgba(120, 170, 255);"
         "color:white;"
+        "background-color: rgba(60, 90, 150, 160);"
         "border:3px solid white;"
         "border-radius:20px;"
         " padding: 8px;"
@@ -378,13 +438,8 @@ QList<Book> MainWindow::parseSearchResults(const QByteArray &jsonData) {
     if (doc.isArray()) {
         for (const QJsonValue &val : doc.array()) {
             QJsonObject obj = val.toObject();
-            Book book;
-            book.title = obj["title"].toString();
-            book.author = obj["author"].toString();
-            book.price = obj["price"].toString().toDouble();
-            book.isbn = obj["isbn"].toString();
-            // ...其他字段赋值
-            books.append(book);
+            QString isbn = obj["isbn"].toString();
+            books.append(bs.findBook(isbn, bs.books));
         }
     }
     return books;
@@ -394,7 +449,7 @@ QList<Book> MainWindow::parseSearchResults(const QByteArray &jsonData) {
 void MainWindow::displaySearchResults(const QList<Book> &books, QWidget *container) {
     // 清空容器
     QLayout *layout = container->layout();
-    layout->setSpacing(15);
+    // layout->setSpacing(15);
     if (layout) {
         QLayoutItem *item;
         while ((item = layout->takeAt(0))) {
@@ -425,6 +480,10 @@ void MainWindow::displaySearchResults(const QList<Book> &books, QWidget *contain
             DisplayDialog *display=new DisplayDialog(const_cast<Book*>(&book),this);
             display->show();
             if(display->exec()==QDialog::Accepted){
+                if (!currentUser) {
+                    QMessageBox::critical(this, "错误", "未登陆");
+                    return;
+                }
                 MainArea->setCurrentIndex(5);
                 openChatWindow(book.sellerId);
             }
@@ -441,6 +500,16 @@ void MainWindow::setpage3(QWidget* pg){
     search_column->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     QString search_content=search_column->text();
     ResizeButton *search_confirm=new ResizeButton("确定");
+        search_confirm->setStyleSheet(
+        "QPushButton {"
+        "    font-size: 15px;"      // 调大字体
+        "    padding: 8px 12px;"   // 增加内边距（可选）
+        "    background-color: rgba(73, 150, 255, 158);"
+        "color:white;"
+        "border:2px solid white;"
+        "border-radius:15px;"
+        "}"
+        );
     search_confirm->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     QHBoxLayout *search_layout=new QHBoxLayout;
@@ -571,7 +640,17 @@ void MainWindow::setpage3(QWidget* pg){
     search_pages->setCurrentIndex(0);
 
     QPushButton *back=new QPushButton("返回");
-    back->setFixedWidth(60);
+    back->setStyleSheet(
+        "QPushButton {"
+        "    font-size: 15px;"      // 调大字体
+        "    padding: 10px 20px;"   // 增加内边距（可选）
+        "    background-color: rgba(73, 150, 255, 158);"
+        "color:white;"
+        "border:2px solid white;"
+        "border-radius:15px;"
+        "}"
+        );
+    
     connect(back,&QPushButton::clicked,[=](){
         search_pages->setCurrentIndex(0);
     });
@@ -755,9 +834,19 @@ void MainWindow::setpage4(QWidget* pg){
         "font-size: 30px;"
         );
     ResizeButton *add_announcement=new ResizeButton("发布新公告");
+        add_announcement->setStyleSheet(
+        "QPushButton {"
+        "    font-size: 18px;"      // 调大字体
+        "    padding: 10px 20px;"   // 增加内边距（可选）
+        "    background-color: rgba(73, 150, 255, 158);"
+        "color:white;"
+        "border:2px solid white;"
+        "border-radius:15px;"
+        "}"
+        );
 
     QHBoxLayout *head_layout=new QHBoxLayout;
-    head_layout->setContentsMargins(0,0,200,0);
+    head_layout->setContentsMargins(40,0,40,0);
     head_layout->setSpacing(30);
     head_layout->addWidget(community_title);
     head_layout->addWidget(add_announcement);
