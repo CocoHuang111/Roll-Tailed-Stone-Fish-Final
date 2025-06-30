@@ -44,7 +44,12 @@ FindbookDialog::FindbookDialog(QWidget *parent) : QDialog(parent) {
         add_tagsline1->addWidget(add_alltag1[k]);
         connect(add_alltag1[k], &QPushButton::toggled, [=](bool checked){
             if (checked) {
-                newtags<<newtags<<add_tag1_content[k];
+                if (!newtags.contains(add_tag1_content[k])) {
+                    newtags << add_tag1_content[k];
+                }
+            }
+            else{
+                newtags.removeAll(add_tag1_content[k]);
             }
         });
     }
@@ -72,7 +77,12 @@ FindbookDialog::FindbookDialog(QWidget *parent) : QDialog(parent) {
         add_tagsline2->addWidget(add_alltag2[k]);
         connect(add_alltag2[k], &QPushButton::toggled, [=](bool checked){
             if (checked) {
-                newtags<<newtags<<add_tag2_content[k];
+                if (!newtags.contains(add_tag2_content[k])) {
+                    newtags << add_tag2_content[k];
+                }
+            }
+            else{
+                newtags.removeAll(add_tag2_content[k]);
             }
         });
     }
