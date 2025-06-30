@@ -99,6 +99,7 @@ bool BookShelf::removeBook(const QString&isbn) {
     if (it != books.end()) {
         delete *it;
         books.erase(it);
+        saveToFile();
         return true;
     }
     return false;
