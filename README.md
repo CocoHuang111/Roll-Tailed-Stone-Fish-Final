@@ -97,6 +97,17 @@ FlippingStoneFish/
 
 2.导入项目文件夹
 
+3.配置Qt Kit(建议使用Desktop Qt 5.15.x)
+
+4.配置Java环境
+
+5.在Qt项目中搜索需要在本机开启Lucene Search API文档中的服务器SearchApplication
+
+## 开发环境配置
+1.安装Qt Creator
+
+2.导入项目文件夹
+
 3.配置Qt Kit（建议使用Desktop Qt 5.15.x）
 
 4.在qt项目中搜索需要在本机开启Lucene Search API文档中的服务器SearchApplication
