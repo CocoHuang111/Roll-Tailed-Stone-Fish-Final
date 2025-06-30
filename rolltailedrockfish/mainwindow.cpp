@@ -18,6 +18,7 @@
 #include "UserManager.h"
 #include "announcementdialog.h"
 #include "Chat.h"
+#include "displaydialog.h"
 
 User* currentUser = nullptr;
 MainWindow::MainWindow(QWidget *parent)
