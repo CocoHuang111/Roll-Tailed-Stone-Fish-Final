@@ -118,7 +118,7 @@ private:
     QWidget *chatContainer;
     void openChatWindow(const QString &contact);
     void updateContact();
-
+    QStackedWidget *contact_stack;
 };
 
 #endif // MAINWINDOW_H
