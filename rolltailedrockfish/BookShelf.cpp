@@ -116,3 +116,13 @@ bool BookShelf::updateBook(const Book* book) {
     return false;
 }
 
+Book* findBook(const QString& isbn, std::vector<Book*> books){
+    Book* ans = nullptr;
+    for(Book* book : books){
+        if(book->isbn == isbn){
+            ans = book;
+            break;
+        }
+    }
+    return ans;
+}
