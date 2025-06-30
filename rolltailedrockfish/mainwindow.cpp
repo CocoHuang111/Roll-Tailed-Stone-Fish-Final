@@ -279,6 +279,17 @@ void MainWindow::updateUserInfo() {
             contactText += QString::fromStdString(currentUser->contact);
         }
         contactLabel->setText(contactText);
+
+        QString bookOnSale = "在售书籍：";
+        if(currentUser) {
+            for (const Book* book : bs.books) {
+                if (!book->isSold && book->sellerId.toStdString() == currentUser->username) { // 只显示未售出的
+                    bookOnSale += book->title;
+                    bookOnSale += " ";
+                }
+            }
+        }
+        onsalebookLabel->setText(bookOnSale);
     }
 }
 
