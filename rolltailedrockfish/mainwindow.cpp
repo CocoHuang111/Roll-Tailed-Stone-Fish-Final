@@ -370,8 +370,8 @@ void MainWindow::setpage2(QWidget* pg){
     pg->setLayout(layout2);
 }
 
-QList<Book *> MainWindow::parseSearchResults(const QByteArray &jsonData) {
-    QList<Book *> books;
+QList<Book> MainWindow::parseSearchResults(const QByteArray &jsonData) {
+    QList<Book> books;
     QJsonDocument doc = QJsonDocument::fromJson(jsonData);
 
     if (doc.isArray()) {
