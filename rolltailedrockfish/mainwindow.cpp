@@ -370,20 +370,15 @@ void MainWindow::setpage2(QWidget* pg){
     pg->setLayout(layout2);
 }
 
-QList<Book> MainWindow::parseSearchResults(const QByteArray &jsonData) {
-    QList<Book> books;
+QList<Book *> MainWindow::parseSearchResults(const QByteArray &jsonData) {
+    QList<Book *> books;
     QJsonDocument doc = QJsonDocument::fromJson(jsonData);
 
     if (doc.isArray()) {
         for (const QJsonValue &val : doc.array()) {
             QJsonObject obj = val.toObject();
-            Book book;
-            book.title = obj["title"].toString();
-            book.author = obj["author"].toString();
-            book.price = obj["price"].toString().toDouble();
-            book.isbn = obj["isbn"].toString();
-            // ...其他字段赋值
-            books.append(book);
+            QString isbn = obj["isbn"].toString();
+            books.append(bs.findBook(isbn, bs.books));
         }
     }
     return books;
