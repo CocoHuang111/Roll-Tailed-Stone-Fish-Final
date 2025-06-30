@@ -20,6 +20,7 @@
 #include "Chat.h"
 #include "displaydialog.h"
 #include "mybookdialog.h"
+#include "BookShelf.h"
 
 User* currentUser = nullptr;
 MainWindow::MainWindow(QWidget *parent)
@@ -487,7 +488,7 @@ void MainWindow::displaySearchResults(const QList<Book> &books, QWidget *contain
         });
         layout->addWidget(bookbtn);
     }
-    layout->addStretch();
+    // layout->addStretch();
     container->setLayout(layout);
 }
 
@@ -664,6 +665,8 @@ void MainWindow::setpage3(QWidget* pg){
             fieldQueries["tags"] = tags;
         }
 
+        bs.uploadBooksJson();
+        
         QUrl url("http://localhost:8080/api/books/advanced-search");
         QJsonDocument doc(fieldQueries);
         QByteArray data = doc.toJson();
