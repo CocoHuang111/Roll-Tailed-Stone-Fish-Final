@@ -1239,6 +1239,8 @@ void MainWindow::setpage6(QWidget* pg){
         QWidget *contact_widget=new QWidget;
         contact_widget->setStyleSheet("background-color:rgba(255,255,255,0);");
         QVBoxLayout *contact_layout=new QVBoxLayout;
+        contact_layout->setContentsMargins(5,20,50,10);
+        contact_layout->setSpacing(20);
         contact_widget->setLayout(contact_layout);
         contact_scroll->setWidget(contact_widget);
         page1_layout->addWidget(title1,1);
@@ -1261,6 +1263,7 @@ void MainWindow::setpage6(QWidget* pg){
             else{
                 for (const QString &contact : contacts) {
                     QPushButton *contactBtn = new QPushButton(contact);
+                    contactBtn->setFixedHeight(50);
                     contactBtn->setStyleSheet(
                         "QPushButton {"
                         "  background-color: rgba(255,255,255,0.1);"
@@ -1278,8 +1281,9 @@ void MainWindow::setpage6(QWidget* pg){
                         openChatWindow(contact);
                     });
 
-                    page1_layout->addWidget(contactBtn);
+                    contact_layout->addWidget(contactBtn);
                 }
+                contact_layout->addStretch();
             }
 
         }
