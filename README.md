@@ -77,33 +77,30 @@ FlippingStoneFish/
 ├── CMakeLists.txt           # CMake构建配置
 └── README.md                # 本文件
 ```
-快速开始
 
-构建要求
+# 快速开始
 
-Qt 5.15+ 开发环境
-C++11兼容编译器
-CMake 3.10+
-构建步骤
+## 构建要求
 
-克隆仓库：
-bash
-git clone https://github.com/yourrepo/FlippingStoneFish.git
-cd FlippingStoneFish
-使用CMake构建：
-bash
-mkdir build && cd build
-cmake ..
-make
-运行程序：
-bash
-./FlippingStoneFish
-开发环境配置
+- Qt 5.15+ 开发环境
 
-安装Qt Creator
-导入项目文件夹
-配置Qt Kit（建议使用Desktop Qt 5.15.x）
-使用指南
+- C++11兼容编译器
+
+- CMake 3.10+
+
+## 构建步骤
+
+克隆仓库
+
+## 开发环境配置
+1.安装Qt Creator
+
+2.导入项目文件夹
+
+3.配置Qt Kit（建议使用Desktop Qt 5.15.x）
+
+
+# 使用指南
 
 用户流程
 
