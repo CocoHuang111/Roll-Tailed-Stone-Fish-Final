@@ -23,7 +23,7 @@ public:
     bool removeBook(const QString& isbn);
     bool updateBook(const Book* book);
     Book findBook(const QString& isbn, QList<Book*> books);
-
+    void uploadBooksJson() const;
     // 批量操作
     //QList<Book> findByAuthor(const QString& author) const;
     //QList<Book> findByTag(const QString& tag) const;
