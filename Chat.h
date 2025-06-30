@@ -23,6 +23,7 @@ public:
     QString user1;
     QString user2;
     QList<ChatMessage> messages;
+    static bool createNewContact(const QString& currentUser, const QString& newContact, const QString& initialMessage = "Hello");
 
     Chat(const QString& user1, const QString& user2);
 
