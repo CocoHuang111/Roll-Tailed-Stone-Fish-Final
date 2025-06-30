@@ -3,10 +3,56 @@
 #include <algorithm>
 #include <QMessageBox>
 #include <QDebug>
+#include <QNetworkAccessManager>
+#include <QHttpMultiPart>
+#include <QFile>
+#include <QStandardPaths>
+#include <QNetworkReply>
+#include <QDir>
+#include <QUrlQuery>
 
 BookShelf::BookShelf()
 {
     loadFromFile();
+}
+
+QString getBooksJsonPath() {
+    // 获取应用数据目录（跨平台）
+    QString dataDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+
+    // 如果目录不存在，则创建
+    QDir dir(dataDir);
+    if (!dir.exists()) {
+        dir.mkpath(".");
+    }
+
+    // 返回完整的文件路径（如 /home/user/.local/share/YourApp/books.json）
+    return dataDir + "/books.json";
+}
+
+void BookShelf::uploadBooksJson() const {
+    QString filePath = getBooksJsonPath();
+
+    QUrlQuery query;
+    query.addQueryItem("filePath", filePath);
+
+    QUrl url("http://localhost:8080/api/books/init");
+    url.setQuery(query);
+
+    QNetworkRequest request(url);
+    QNetworkAccessManager *manager = new QNetworkAccessManager();
+    QNetworkReply *reply = manager->get(request);
+
+    // 处理响应
+    QObject::connect(reply, &QNetworkReply::finished, [=]() {
+        if (reply->error() == QNetworkReply::NoError) {
+            qDebug() << "Upload successful:" << reply->readAll();
+        } else {
+            qDebug() << "Upload failed:" << reply->errorString();
+        }
+        reply->deleteLater();
+        manager->deleteLater();
+    });
 }
 
 bool BookShelf::loadFromFile(const QString &path) {
@@ -37,7 +83,6 @@ bool BookShelf::saveToFile(const QString &path) const {
         qWarning() << "No storage path specified";
         return false;
     }
-
     // 准备要保存的JSON数据
     QJsonArray jsonArray;
     for (const Book* book : books) {
@@ -58,11 +103,8 @@ bool BookShelf::saveToFile(const QString &path) const {
         file.close();
         return false;
     }
-
     file.close();
     return true;
-
-
 }
 
 bool BookShelf::validateBook(const Book* book) const {
@@ -132,4 +174,3 @@ Book BookShelf::findBook(const QString& isbn, QList<Book*> books) {
     }
     return *ans;
 }
-
