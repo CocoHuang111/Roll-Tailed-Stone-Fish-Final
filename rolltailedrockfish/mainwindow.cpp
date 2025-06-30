@@ -826,10 +826,10 @@ void MainWindow::refreshOwnerbook(QVBoxLayout* scrollLayout){
                         "}"
                     );
                     connect(bookbtn,&QPushButton::clicked,[=](){
-                        DisplayDialog *display=new DisplayDialog(book,this);
+                        MyBookDialog *display=new MyBookDialog(book,this);
                         display->show();
                         if(display->exec()==QDialog::Accepted){
-                            MainArea->setCurrentIndex(5);
+                            //TODO 下架（当前指针为book）
                         }
                         delete display;
                     });
