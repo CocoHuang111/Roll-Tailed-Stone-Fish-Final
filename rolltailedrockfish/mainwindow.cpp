@@ -829,7 +829,10 @@ void MainWindow::refreshOwnerbook(QVBoxLayout* scrollLayout){
                         MyBookDialog *display=new MyBookDialog(book,this);
                         display->show();
                         if(display->exec()==QDialog::Accepted){
-                            //TODO 下架（当前指针为book）
+                            bs.removeBook(book->isbn);
+                            QMessageBox::information(this, "成功", "下架成功！");
+                            updateUserInfo();
+                            refreshOwnerbook(scrollLayout);
                         }
                         delete display;
                     });
