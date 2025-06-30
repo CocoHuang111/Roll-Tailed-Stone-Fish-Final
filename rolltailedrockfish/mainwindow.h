@@ -82,6 +82,29 @@ private:
     // page3 search相关
     QList<Book> parseSearchResults(const QByteArray &jsonData);
     void displaySearchResults(const QList<Book> &books, QWidget *container);
+    QSet<QString> selectedTags;
+    // 定义样式
+    QString normalStyle = "QPushButton{"
+                          "background-color: rgba(73, 150, 255, 158);"
+                          "color:white;"
+                          "border:3px solid white;"
+                          "border-radius:20px;"
+                          "padding: 8px;"
+                          "font-size:20px;"
+                          "}"
+                          "QPushButton:hover{"
+                          "background-color: rgb(120, 170, 255);"
+                          "font-size:20px;"
+                          "}";
+
+    QString selectedStyle = "QPushButton{"
+                            "background-color: rgb(255, 170, 0);" // 选中时变为橙色
+                            "color:white;"
+                            "border:3px solid white;"
+                            "border-radius:20px;"
+                            "padding: 8px;"
+                            "font-size:20px;"
+                            "}";
     //page4 announce相关
     void saveAnnouncementsToFile(const QList<Announcement> &ann);
     QList<Announcement> readAllAnnouncements();
