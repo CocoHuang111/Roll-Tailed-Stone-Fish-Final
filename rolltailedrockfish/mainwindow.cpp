@@ -599,6 +599,7 @@ void MainWindow::setpage3(QWidget* pg){
     });
 
     QPushButton *back=new QPushButton("返回");
+    back->setFixedWidth(60);  
     connect(back,&QPushButton::clicked,[=](){
         search_pages->setCurrentIndex(0);
     });
@@ -606,8 +607,7 @@ void MainWindow::setpage3(QWidget* pg){
     layout3->setContentsMargins(30,35,30,35);
     layout3->addLayout(search_layout,1);
     layout3->addWidget(search_pages,13);
-
-    pg->setLayout(layout3);
+    layout3->addWidget(back, 0, Qt::AlignLeft);
 }
 
 
