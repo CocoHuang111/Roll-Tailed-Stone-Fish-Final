@@ -93,7 +93,6 @@ private:
     void openChatWindow(const QString &contact);
     void updateContact();
 
-    void refreshOwnerbook(QVBoxLayout* scrollLayout);
 };
 
 #endif // MAINWINDOW_H
