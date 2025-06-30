@@ -11,6 +11,7 @@ DisplayDialog::DisplayDialog(Book *book, QWidget *parent)  : QDialog(parent) ,bo
     display_publisher=new QLabel("出版商："+book->publisher);
     display_description=new QLabel("内容简介："+book->description);
     display_price=new QLabel("售价："+QString::number(book->price));
+    display_seller=new QLabel("卖家："+book->sellerId);
     contact_seller=new QPushButton("联系卖家");
     exit=new QPushButton("取消");
 
