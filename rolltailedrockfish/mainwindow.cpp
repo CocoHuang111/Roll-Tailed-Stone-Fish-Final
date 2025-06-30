@@ -321,8 +321,8 @@ void MainWindow::setpage2(QWidget* pg){
         "font-size: 20px;"
     );
 
-    QLabel *book_on_sale=new QLabel("在售书籍：");
-    book_on_sale->setStyleSheet(
+    onsalebookLabel = new QLabel("在售书籍",pg);
+    onsalebookLabel->setStyleSheet(
         "background-color: rgba(120, 170, 255);"
         "color:white;"
         "border:3px solid white;"
