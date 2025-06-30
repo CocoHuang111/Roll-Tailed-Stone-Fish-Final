@@ -179,9 +179,9 @@ MainWindow --> User
 @enduml
 ```
 # 演示视频
-https://disk.pku.edu.cn/link/AR6F18C34084134B1B81A91AC1CD0EA63F
+https://disk.pku.edu.cn/link/AAF78F94F80BFE442AB7BE3F9592C23E45
 文件名：44-演示.mp4
-文件路径：AnyShare://康恩铭_2400012948/44-演示.mp4
+有效期限：2025-07-31 00:09
 提取码：aU38
 
 ## 最后更新：2025年6月30日
