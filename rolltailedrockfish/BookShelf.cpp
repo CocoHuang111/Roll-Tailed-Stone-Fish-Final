@@ -2,6 +2,7 @@
 #include <QJsonArray>
 #include <algorithm>
 #include <QMessageBox>
+#include <QDebug>
 
 BookShelf::BookShelf()
 {
@@ -116,7 +117,7 @@ bool BookShelf::updateBook(const Book* book) {
     return false;
 }
 
-Book BookShelf::findBook(const QString& isbn, QList<Book*> books){
+Book BookShelf::findBook(const QString& isbn, QList<Book*> books) const {
     Book* ans = nullptr;
     for(Book* book : books){
         if(book->isbn == isbn){
@@ -124,5 +125,10 @@ Book BookShelf::findBook(const QString& isbn, QList<Book*> books){
             break;
         }
     }
-    return ans;
+    if (ans == nullptr) {
+        qDebug() << "find book by isbn导致错误";
+        return Book();
+    }
+    return *ans;
 }
+
