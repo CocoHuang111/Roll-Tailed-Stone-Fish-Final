@@ -20,7 +20,8 @@ SOURCES += \
     mainwindow.cpp \
     registerdialog.cpp \
     User.cpp \
-    UserManager.cpp 
+    UserManager.cpp \
+    mybookdialog.cpp
 
 HEADERS += \
     Announcement.h \
@@ -33,7 +34,8 @@ HEADERS += \
     mainwindow.h \
     registerdialog.h \
     User.h \
-    UserManager.h 
+    UserManager.h \
+    mybookdialog.h
 
 FORMS += \
     mainwindow.ui
