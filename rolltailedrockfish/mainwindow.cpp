@@ -717,7 +717,7 @@ void MainWindow::refreshOwnerbook(QVBoxLayout* scrollLayout){
     if(!bs.books.isEmpty()){
         for(auto book:bs.books){
             if((book!=nullptr) && (currentUser!=nullptr)){
-                if(book->sellerId==QString::fromStdString(currentUser->username)){
+                if((book->sellerId==QString::fromStdString(currentUser->username))&&(book->isSold)){
                     QPushButton *bookbtn=new QPushButton(book->title);
                     bookbtn->setFixedHeight(50);
                     bookbtn->setStyleSheet(
@@ -733,20 +733,12 @@ void MainWindow::refreshOwnerbook(QVBoxLayout* scrollLayout){
                         "}"
                     );
                     connect(bookbtn,&QPushButton::clicked,[=](){
-                        bookbtn->setStyleSheet(
-                            "QPushButton{"
-                            "background-color: rgb(120, 170, 255);"
-                            "color:white;"
-                            "border:3px solid white;"
-                            "border-radius:20px;"
-                            " padding: 8px;"
-                            "}"
-                        );
                         DisplayDialog *display=new DisplayDialog(book,this);
                         display->show();
-                        connect(display->contact_seller,&QPushButton::clicked,[=](){
+                        if(display->exec()==QDialog::Accepted){
                             MainArea->setCurrentIndex(5);
-                        });
+                        }
+                        delete display;
                     });
                     scrollLayout->addWidget(bookbtn);
                 }
