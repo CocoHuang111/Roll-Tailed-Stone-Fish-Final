@@ -23,7 +23,7 @@ void BookShelf::uploadBooksJson() const {
     }
     QNetworkAccessManager *manager = new QNetworkAccessManager(nullptr);
 
-    QUrl url("http://localhost:8080/upload-books");
+    QUrl url("http://localhost:8080/init");
     QNetworkRequest request(url);
     QHttpMultiPart *multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
     QHttpPart filePart;
