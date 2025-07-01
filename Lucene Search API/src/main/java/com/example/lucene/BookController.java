@@ -1,5 +1,7 @@
 package com.example.lucene;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,13 +13,16 @@ import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.Directory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/books")
@@ -33,12 +38,15 @@ public class BookController {
         this.loader = loader;
     }
 
-    // 初始化索引
-    @PostMapping("/init")
-    public String initIndex(@RequestParam String filePath) throws Exception {
+    @PostMapping(value = "/init", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public String initIndex(@RequestPart("file") MultipartFile file) throws Exception {
+        // 1. 将上传的文件保存到临时路径
+        Path tempFile = Files.createTempFile("books-", ".json");
+        file.transferTo(tempFile);
+        // 2. 从临时文件加载数据
         IndexWriterConfig config = new IndexWriterConfig(analyzer);
         try (IndexWriter writer = new IndexWriter(directory, config)) {
-            List<Book> books = loader.loadBooksFromJson(filePath);
+            List<Book> books = loader.loadBooksFromJson(tempFile.toString());
             new BookIndexer().indexBooks(writer, books);
             return "索引初始化完成，共加载 " + books.size() + " 本书";
         }
