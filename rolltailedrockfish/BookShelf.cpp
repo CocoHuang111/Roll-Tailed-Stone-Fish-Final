@@ -14,30 +14,32 @@ BookShelf::BookShelf()
     loadFromFile();
 }
 
-void BookShelf::uploadBooksJson() const {
-    QString filePath = "books.json"; // 默认在 build 目录下
-    QFile file(filePath);
-    if (!file.open(QIODevice::ReadOnly)) {
-        qDebug() << "Failed to open file:" << filePath;
-        return;
+QString getBooksJsonPath() {
+    // 获取应用数据目录（跨平台）
+    QString dataDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+
+    // 如果目录不存在，则创建
+    QDir dir(dataDir);
+    if (!dir.exists()) {
+        dir.mkpath(".");
     }
 
-    QNetworkAccessManager *manager = new QNetworkAccessManager(nullptr);
+    // 返回完整的文件路径（如 /home/user/.local/share/YourApp/books.json）
+    return dataDir + "/books.json";
+}
 
-    QUrl url("http://localhost:8080/upload-books");
+void BookShelf::uploadBooksJson() const {
+    QString filePath = getBooksJsonPath();
+
+    QUrlQuery query;
+    query.addQueryItem("filePath", filePath);
+
+    QUrl url("http://localhost:8080/api/books/init");
+    url.setQuery(query);
+
     QNetworkRequest request(url);
-
-    QHttpMultiPart *multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
-
-    QHttpPart filePart;
-    filePart.setHeader(QNetworkRequest::ContentDispositionHeader,
-                       QVariant("form-data; name=\"file\"; filename=\"books.json\""));
-    filePart.setBody(file.readAll());
-
-    multiPart->append(filePart);
-
-    QNetworkReply *reply = manager->post(request, multiPart);
-    multiPart->setParent(reply); // 内存管理
+    QNetworkAccessManager *manager = new QNetworkAccessManager();
+    QNetworkReply *reply = manager->get(request);
 
     // 处理响应
     QObject::connect(reply, &QNetworkReply::finished, [=]() {
@@ -47,6 +49,7 @@ void BookShelf::uploadBooksJson() const {
             qDebug() << "Upload failed:" << reply->errorString();
         }
         reply->deleteLater();
+        manager->deleteLater();
     });
 }
 
